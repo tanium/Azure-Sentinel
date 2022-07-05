@@ -12,8 +12,7 @@ cat "$GEN_FILE" | jq > "$ORIG_FILE"
 cat "$GEN_FILE" |
   jq '.resources += [
 '"`cat ./Solutions/Tanium/Data/AzureSentinelConnector.json`"',
-'"`cat ./Solutions/Tanium/Data/TaniumSentinelConnector.json`"',
-'"`cat ./Solutions/Tanium/Data/AddCommentLA.json`"'
+'"`cat ./Solutions/Tanium/Data/TaniumSentinelConnector.json`"'
   ]' > "$NEW_FILE"
 
 diff -u  "$ORIG_FILE" "$NEW_FILE" || true
