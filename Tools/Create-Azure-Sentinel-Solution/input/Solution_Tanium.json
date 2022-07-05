@@ -1,0 +1,24 @@
+{
+  "Name": "Tanium",
+  "Author": "Ian Hands - ian.hands@tanium.com",
+  "Logo": "<img src=\"https://www.tanium.com/wp-content/themes/main/lib/images/header-logo.svg\">",
+  "Description": "WIP Sentinel bundle for Tanium",
+  "WorkbookDescription": "Tanium main workbook",
+  "Workbooks": [
+    "Workbooks/TaniumWorkbook.json"
+  ],
+  "Playbooks": [
+    "Playbooks/Tanium-CloseTHRAlert/azuredeploy.json",
+    "Playbooks/Tanium-AddComment/azuredeploy.json",
+    "Playbooks/Tanium-CollectComplyFindings/azuredeploy.json",
+    "Playbooks/Tanium-CollectDefenderStatus/azuredeploy.json",
+    "Playbooks/Tanium-CollectSCCMClientStatus/azuredeploy.json",
+    "Playbooks/Tanium-QuarantineHosts/azuredeploy.json"
+  ],
+  "Analytic Rules": [
+    "Analytic Rules/TaniumThreatResponseAlerts.yaml"
+  ],
+  "BasePath": "http://localhost:8000",
+  "Version": "1.0.1",
+  "Metadata": "SolutionMetadata.json"
+}
