@@ -19,6 +19,6 @@
     "Analytic Rules/TaniumThreatResponseAlerts.yaml"
   ],
   "BasePath": "http://localhost:8000",
-  "Version": "1.0.1",
+  "Version": "1.0.2",
   "Metadata": "SolutionMetadata.json"
 }

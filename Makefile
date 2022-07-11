@@ -1,13 +1,9 @@
 .PHONY: all
-all: Solutions/Tanium/Packages/1.0.1.zip
+all: Solutions/Tanium/Packages/1.0.2.zip
 
-Solutions/Tanium/Packages/1.0.1.zip: Tools/Create-Azure-Sentinel-Solution/input/Solution_Tanium.json
+Solutions/Tanium/Packages/1.0.2.zip: Tools/Create-Azure-Sentinel-Solution/input/Solution_Tanium.json
 	rm -f ./Solutions/Tanium/Package/* && \
-	./tanium_scripts/pre-build.sh && \
-	./tanium_scripts/fix_playbooks.sh && \
-	./tanium_scripts/build.sh && \
-	./tanium_scripts/fix_maintemp.sh && \
-	./tanium_scripts/fix_createuidef.sh
+	./tanium_scripts/build.sh 
 
 .PHONY: dev-server
 dev-server:
