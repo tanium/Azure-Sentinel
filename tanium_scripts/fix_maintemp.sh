@@ -6,14 +6,14 @@ set -e
 GEN_FILE="Solutions/Tanium/Package/mainTemplate.json"
 ORIG_FILE="Solutions/Tanium/Package/mainTemplate.original.json"
 NEW_FILE="Solutions/Tanium/Package/mainTempate.custom.json"
-ZIP_FILE="Solutions/Tanium/Package/1.0.1.zip"
+ZIP_FILE="Solutions/Tanium/Package/1.0.2.zip"
 
 cat "$GEN_FILE" | jq > "$ORIG_FILE"
-cat "$GEN_FILE" |
-  jq '.resources += [
-'"`cat ./Solutions/Tanium/Data/AzureSentinelConnector.json`"',
-'"`cat ./Solutions/Tanium/Data/TaniumSentinelConnector.json`"'
-  ]' > "$NEW_FILE"
+# cat "$GEN_FILE" |
+#   jq '.resources += [
+# '"`cat ./Solutions/Tanium/Data/AzureSentinelConnector.json`"',
+# '"`cat ./Solutions/Tanium/Data/TaniumSentinelConnector.json`"'
+#   ]' > "$NEW_FILE"
 
 diff -u  "$ORIG_FILE" "$NEW_FILE" || true
 cp "$NEW_FILE" "$GEN_FILE"
