@@ -4,7 +4,7 @@ set -e
 GEN_FILE="Solutions/Tanium/Package/createUiDefinition.json"
 ORIG_FILE="Solutions/Tanium/Package/createUiDefinition.original.json"
 NEW_FILE="Solutions/Tanium/Package/createUiDefinition.custom.json"
-ZIP_FILE="Solutions/Tanium/Package/1.0.1.zip"
+ZIP_FILE="Solutions/Tanium/Package/1.0.2.zip"
 
 cat "$GEN_FILE" | jq > "$ORIG_FILE"
 cat "$GEN_FILE" |
