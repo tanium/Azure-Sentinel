@@ -1,8 +1,8 @@
 {
   "Name": "Tanium",
-  "Author": "Ian Hands - ian.hands@tanium.com",
+  "Author": "Tanium - support@tanium.com",
   "Logo": "<img src=\"https://www.tanium.com/wp-content/themes/main/lib/images/header-logo.svg\">",
-  "Description": "WIP Sentinel bundle for Tanium",
+  "Description": "Sentinel bundle for Tanium",
   "WorkbookDescription": "Tanium main workbook",
   "Workbooks": [
     "Workbooks/TaniumWorkbook.json"
@@ -18,7 +18,12 @@
   "Analytic Rules": [
     "Analytic Rules/TaniumThreatResponseAlerts.yaml"
   ],
+  "Data Connectors": [
+    "Data Connectors/Connector_REST_API_Tanium.json"
+  ],
   "BasePath": "http://localhost:8000",
   "Version": "1.0.2",
-  "Metadata": "SolutionMetadata.json"
+  "Metadata": "SolutionMetadata.json",  
+  "TemplateSpec": true,
+  "Is1PConnector": false
 }

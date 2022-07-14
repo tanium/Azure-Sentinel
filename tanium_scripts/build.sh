@@ -10,7 +10,7 @@ _fail() {
   exit 1
 }
 
-pwsh -Command 'Tools/Create-Azure-Sentinel-Solution/createSolution.ps1' > "$LOG"
+pwsh -Command 'Tools/Create-Azure-Sentinel-Solution/V2/createSolutionV2.ps1' > "$LOG"
 grep -qm1 '^Failed' "$LOG" && _fail
 echo "Build succeeded see:
 - files: ./Solutions/Tanium/Package/*

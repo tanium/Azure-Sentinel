@@ -3,7 +3,12 @@ all: Solutions/Tanium/Packages/1.0.2.zip
 
 Solutions/Tanium/Packages/1.0.2.zip: Tools/Create-Azure-Sentinel-Solution/input/Solution_Tanium.json
 	rm -f ./Solutions/Tanium/Package/* && \
-	./tanium_scripts/build.sh 
+	./tanium_scripts/build.sh
+
+# run after build 
+fix_createuidef:
+	./tanium_scripts/fix_createuidef.sh 
+
 
 .PHONY: dev-server
 dev-server:
