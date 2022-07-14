@@ -1,6 +1,6 @@
 {
-    "id": "TaniumConnector",
-    "title": "Tanium Connector",
+    "id": "Tanium",
+    "title": "Tanium",
     "publisher": "Tanium",
     "descriptionMarkdown": "The [Tanium](https://tanium.com) connector allows you to easily connect your Tanium platform to Azure Sentinel via [Tanium Connect](https://docs.tanium.com/connect/connect/index.html). This will enable Tanium to send [Tanium Threat Response Alerts](https://docs.tanium.com/threat_response/threat_response/index.html) and other data into the Azure Sentinel platform. This gives you insight to better view and control your environment.",
     "graphQueries": [
