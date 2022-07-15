@@ -1,5 +1,5 @@
 .PHONY: all
-all: v1
+all: v1 fix_createuidef
 
 v2: 
 	cp ./tanium_scripts/input.json ./Tools/Create-Azure-Sentinel-Solution/V2/input/Solution_Tanium.json
@@ -13,7 +13,7 @@ v1:
 
 # run after build for v1
 fix_createuidef:
-	./tanium_scripts/fix_createuidef.sh 
+	./tanium_scripts/fix_createuidefv1.sh 
 
 # run before running v2 or v1
 .PHONY: dev-server
