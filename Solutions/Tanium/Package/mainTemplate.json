@@ -30,7 +30,7 @@
     },
     "workbook1-name": {
       "type": "string",
-      "defaultValue": null,
+      "defaultValue": "Tanium Workbook",
       "minLength": 1,
       "metadata": {
         "description": "Name for the workbook"
@@ -38,6 +38,8 @@
     }
   },
   "variables": {
+    "connector_id": "812f04a4-11d5-4eb4-a90a-54cdd4f34a87",
+    "_connector_id": "[variables('connector_id')]",
     "solutionId": "taniuminc1646329360287.azure-sentinel-solution-tanium",
     "_solutionId": "[variables('solutionId')]",
     "email": "support@tanium.com",
@@ -181,10 +183,6 @@
                   "email": "support@tanium.com",
                   "tier": "Partner",
                   "link": "https://support.tanium.com"
-                },
-                "dependencies": {
-                  "operator": "AND",
-                  "criteria": []
                 }
               },
               "description": "Tanium main workbook"
@@ -341,7 +339,7 @@
                           "Authorization": "[[parameters('ForwarderAPIToken')]"
                         },
                         "method": "POST",
-                        "uri": "[[concat('https://', parameters('TaniumServerHost'), '/playbook?type=close_thr_alert')]"
+                        "uri": "[uri('https://',concat(parameters('TaniumServerHost'), '/playbook?type=close_thr_alert'))]"
                       }
                     }
                   }
@@ -391,7 +389,7 @@
           ],
           "metadata": {
             "comments": "This playbook uses your Tanium Server to close THR Alerts associated with Sentinel Incidents",
-            "lastUpdateTime": "2022-07-14T17:34:39.774Z",
+            "lastUpdateTime": "2022-07-14T19:59:02.828Z",
             "releaseNotes": {
               "version": "1.0",
               "title": "[variables('blanks')]",
@@ -583,7 +581,7 @@
           ],
           "metadata": {
             "comments": "This playbook will add a comment to a Microsoft Sentinel incident.",
-            "lastUpdateTime": "2022-07-14T17:34:40.143Z",
+            "lastUpdateTime": "2022-07-14T19:59:03.413Z",
             "releaseNotes": {
               "version": "1.0",
               "title": "[variables('blanks')]",
@@ -743,7 +741,7 @@
                           "Authorization": "[[parameters('ForwarderAPIToken')]"
                         },
                         "method": "POST",
-                        "uri": "[[concat('https://', parameters('TaniumServerHost'), '/playbook?type=add_comply_findings')]"
+                        "uri": "[uri('https://',concat(parameters('TaniumServerHost'), '/playbook?type=add_comply_findings'))]"
                       }
                     }
                   }
@@ -793,7 +791,7 @@
           ],
           "metadata": {
             "comments": "This playbook uses your Tanium Server to gather Comply failures related to hosts associated with Sentinel Incidents",
-            "lastUpdateTime": "2022-07-14T17:34:40.509Z",
+            "lastUpdateTime": "2022-07-14T19:59:03.723Z",
             "releaseNotes": {
               "version": "1.0",
               "title": "[variables('blanks')]",
@@ -953,7 +951,7 @@
                           "Authorization": "[[parameters('ForwarderAPIToken')]"
                         },
                         "method": "POST",
-                        "uri": "[[concat('https://', parameters('TaniumServerHost'), '/playbook?type=add_defender_health')]"
+                        "uri": "[uri('https://',concat(parameters('TaniumServerHost'), '/playbook?type=add_defender_health'))]"
                       }
                     }
                   }
@@ -1003,7 +1001,7 @@
           ],
           "metadata": {
             "comments": "This playbook uses your Tanium Server to gather Defender statuses related to hosts associated with Sentinel Incidents",
-            "lastUpdateTime": "2022-07-14T17:34:41.050Z",
+            "lastUpdateTime": "2022-07-14T19:59:04.012Z",
             "releaseNotes": {
               "version": "1.0",
               "title": "[variables('blanks')]",
@@ -1163,7 +1161,7 @@
                           "Authorization": "[[parameters('ForwarderAPIToken')]"
                         },
                         "method": "POST",
-                        "uri": "[[concat('https://', parameters('TaniumServerHost'), '/playbook?type=add_sccm_health')]"
+                        "uri": "[uri('https://',concat(parameters('TaniumServerHost'), '/playbook?type=add_sccm_health'))]"
                       }
                     }
                   }
@@ -1213,7 +1211,7 @@
           ],
           "metadata": {
             "comments": "This playbook uses your Tanium Server to gather SCCM client statuses related to hosts associated with Sentinel Incidents",
-            "lastUpdateTime": "2022-07-14T17:34:41.454Z",
+            "lastUpdateTime": "2022-07-14T19:59:04.482Z",
             "releaseNotes": {
               "version": "1.0",
               "title": "[variables('blanks')]",
@@ -1373,7 +1371,7 @@
                           "Authorization": "[[parameters('ForwarderAPIToken')]"
                         },
                         "method": "POST",
-                        "uri": "[[concat('https://', parameters('TaniumServerHost'), '/playbook?type=quarantine')]"
+                        "uri": "[uri('https://',concat(parameters('TaniumServerHost'), '/playbook?type=quarantine'))]"
                       }
                     }
                   }
@@ -1423,7 +1421,7 @@
           ],
           "metadata": {
             "comments": "This playbook uses your Tanium Server to quarantine hosts associated with Sentinel Incidents",
-            "lastUpdateTime": "2022-07-14T17:34:41.780Z",
+            "lastUpdateTime": "2022-07-14T19:59:04.866Z",
             "releaseNotes": {
               "version": "1.0",
               "title": "[variables('blanks')]",
@@ -1493,8 +1491,8 @@
                     "entityType": "URL",
                     "fieldMappings": [
                       {
-                        "columnName": "TaniumUrl",
-                        "identifier": "Url"
+                        "identifier": "Url",
+                        "columnName": "TaniumUrl"
                       }
                     ]
                   },
@@ -1502,8 +1500,8 @@
                     "entityType": "IP",
                     "fieldMappings": [
                       {
-                        "columnName": "Computer_IP_s",
-                        "identifier": "Address"
+                        "identifier": "Address",
+                        "columnName": "Computer_IP_s"
                       }
                     ]
                   },
@@ -1511,8 +1509,8 @@
                     "entityType": "Host",
                     "fieldMappings": [
                       {
-                        "columnName": "Computer_Name_s",
-                        "identifier": "HostName"
+                        "identifier": "HostName",
+                        "columnName": "Computer_Name_s"
                       }
                     ]
                   },
@@ -1520,8 +1518,8 @@
                     "entityType": "Malware",
                     "fieldMappings": [
                       {
-                        "columnName": "TaniumTHRLabel",
-                        "identifier": "Name"
+                        "identifier": "Name",
+                        "columnName": "TaniumTHRLabel"
                       }
                     ]
                   }
@@ -1699,7 +1697,7 @@
                     }
                   ],
                   "metadata": {
-                    "id": "812f04a4-11d5-4eb4-a90a-54cdd4f34a87",
+                    "id": "[variables('_connector_id')]",
                     "version": "1.0.0",
                     "kind": "dataConnector",
                     "source": {
