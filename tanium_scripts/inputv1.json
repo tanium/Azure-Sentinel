@@ -18,6 +18,9 @@
     "Analytic Rules": [
       "Analytic Rules/TaniumThreatResponseAlerts.yaml"
     ],
+    "Data Connectors": [
+      "Data Connectors/Connector_REST_API_Tanium.json"
+    ],
     "BasePath": "http://localhost:8000",
     "Version": "1.0.2",
     "Metadata": "SolutionMetadata.json"

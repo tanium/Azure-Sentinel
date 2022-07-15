@@ -1,24 +1,27 @@
 {
-  "Name": "Tanium",
-  "Author": "Tanium - support@tanium.com",
-  "Logo": "<img src=\"https://www.tanium.com/wp-content/themes/main/lib/images/header-logo.svg\">",
-  "Description": "Sentinel bundle for Tanium",
-  "WorkbookDescription": "Tanium main workbook",
-  "Workbooks": [
-    "Workbooks/TaniumWorkbook.json"
-  ],
-  "Playbooks": [
-    "Playbooks/Tanium-CloseTHRAlert/azuredeploy.json",
-    "Playbooks/Tanium-AddComment/azuredeploy.json",
-    "Playbooks/Tanium-CollectComplyFindings/azuredeploy.json",
-    "Playbooks/Tanium-CollectDefenderStatus/azuredeploy.json",
-    "Playbooks/Tanium-CollectSCCMClientStatus/azuredeploy.json",
-    "Playbooks/Tanium-QuarantineHosts/azuredeploy.json"
-  ],
-  "Analytic Rules": [
-    "Analytic Rules/TaniumThreatResponseAlerts.yaml"
-  ],
-  "BasePath": "http://localhost:8000",
-  "Version": "1.0.2",
-  "Metadata": "SolutionMetadata.json"
-}
+    "Name": "Tanium",
+    "Author": "Tanium - support@tanium.com",
+    "Logo": "<img src=\"https://www.tanium.com/wp-content/themes/main/lib/images/header-logo.svg\">",
+    "Description": "Sentinel bundle for Tanium",
+    "WorkbookDescription": "Tanium main workbook",
+    "Workbooks": [
+      "Workbooks/TaniumWorkbook.json"
+    ],
+    "Playbooks": [
+      "Playbooks/Tanium-CloseTHRAlert/azuredeploy.json",
+      "Playbooks/Tanium-AddComment/azuredeploy.json",
+      "Playbooks/Tanium-CollectComplyFindings/azuredeploy.json",
+      "Playbooks/Tanium-CollectDefenderStatus/azuredeploy.json",
+      "Playbooks/Tanium-CollectSCCMClientStatus/azuredeploy.json",
+      "Playbooks/Tanium-QuarantineHosts/azuredeploy.json"
+    ],
+    "Analytic Rules": [
+      "Analytic Rules/TaniumThreatResponseAlerts.yaml"
+    ],
+    "Data Connectors": [
+      "Data Connectors/Connector_REST_API_Tanium.json"
+    ],
+    "BasePath": "http://localhost:8000",
+    "Version": "1.0.2",
+    "Metadata": "SolutionMetadata.json"
+  }

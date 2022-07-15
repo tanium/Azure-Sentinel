@@ -1,5 +1,5 @@
 .PHONY: all
-all: v2
+all: v1
 
 v2: 
 	cp ./tanium_scripts/input.json ./Tools/Create-Azure-Sentinel-Solution/V2/input/Solution_Tanium.json
