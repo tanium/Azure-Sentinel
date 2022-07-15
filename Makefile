@@ -9,7 +9,6 @@ Solutions/Tanium/Packages/1.0.2.zip: Tools/Create-Azure-Sentinel-Solution/input/
 fix_createuidef:
 	./tanium_scripts/fix_createuidef.sh 
 
-
 .PHONY: dev-server
 dev-server:
 	cd ./Solutions/Tanium && python3 -m http.server
