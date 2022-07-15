@@ -6,7 +6,7 @@ set -e
 GEN_FILE="Solutions/Tanium/Package/mainTemplate.json"
 ORIG_FILE="Solutions/Tanium/Package/mainTemplate.original.json"
 NEW_FILE="Solutions/Tanium/Package/mainTempate.custom.json"
-ZIP_FILE="Solutions/Tanium/Package/1.0.2.zip"
+ZIP_FILE="Solutions/Tanium/Package/2.0.0.zip"
 
 cat "$GEN_FILE" | jq > "$ORIG_FILE"
 # cat "$GEN_FILE" |

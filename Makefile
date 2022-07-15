@@ -1,7 +1,7 @@
 .PHONY: all
-all: Solutions/Tanium/Packages/1.0.2.zip
+all: Solutions/Tanium/Packages/2.0.0.zip
 
-Solutions/Tanium/Packages/1.0.2.zip: Tools/Create-Azure-Sentinel-Solution/input/Solution_Tanium.json
+Solutions/Tanium/Packages/2.0.0.zip: Tools/Create-Azure-Sentinel-Solution/V2/input/Solution_Tanium.json
 	rm -f ./Solutions/Tanium/Package/* && \
 	./tanium_scripts/build.sh
 
