@@ -59,7 +59,7 @@
         "description": "Resource name for the logic app playbook.  No spaces are allowed"
       }
     },
-    "playbook1-TaniumServerHost": {
+    "playbook1-TaniumForwarderHost": {
       "defaultValue": "__Change_Me_Host__",
       "type": "string",
       "minLength": 1
@@ -85,7 +85,7 @@
         "description": "Resource name for the logic app playbook.  No spaces are allowed"
       }
     },
-    "playbook3-TaniumServerHost": {
+    "playbook3-TaniumForwarderHost": {
       "defaultValue": "__Change_Me_Host__",
       "type": "string",
       "minLength": 1
@@ -103,7 +103,7 @@
         "description": "Resource name for the logic app playbook.  No spaces are allowed"
       }
     },
-    "playbook4-TaniumServerHost": {
+    "playbook4-TaniumForwarderHost": {
       "defaultValue": "__Change_Me_Host__",
       "type": "string",
       "minLength": 1
@@ -121,7 +121,7 @@
         "description": "Resource name for the logic app playbook.  No spaces are allowed"
       }
     },
-    "playbook5-TaniumServerHost": {
+    "playbook5-TaniumForwarderHost": {
       "defaultValue": "__Change_Me_Host__",
       "type": "string",
       "minLength": 1
@@ -139,7 +139,7 @@
         "description": "Resource name for the logic app playbook.  No spaces are allowed"
       }
     },
-    "playbook6-TaniumServerHost": {
+    "playbook6-TaniumForwarderHost": {
       "defaultValue": "__Change_Me_Host__",
       "type": "string",
       "minLength": 1
@@ -159,7 +159,7 @@
     },
     "connector1-name": {
       "type": "string",
-      "defaultValue": "970ea24f-10e8-403d-baa7-761f630d3ece"
+      "defaultValue": "be987979-655d-4097-b695-1f29fa9b9500"
     }
   },
   "variables": {
@@ -305,7 +305,7 @@
                   "Authorization": "[parameters('playbook1-ForwarderAPIToken')]"
                 },
                 "method": "POST",
-                "uri": "[uri(concat('https://',parameters('playbook1-TaniumServerHost')), '/playbook?type=close_thr_alert')]"
+                "uri": "[uri('https://',concat(parameters('playbook1-TaniumForwarderHost'), '/playbook?type=close_thr_alert'))]"
               }
             }
           }
@@ -519,7 +519,7 @@
                   "Authorization": "[parameters('playbook3-ForwarderAPIToken')]"
                 },
                 "method": "POST",
-                "uri": "[uri(concat('https://',parameters('playbook3-TaniumServerHost')), '/playbook?type=add_comply_findings')]"
+                "uri": "[uri('https://',concat(parameters('playbook3-TaniumForwarderHost'), '/playbook?type=add_comply_findings'))]"
               }
             }
           }
@@ -631,7 +631,7 @@
                   "Authorization": "[parameters('playbook4-ForwarderAPIToken')]"
                 },
                 "method": "POST",
-                "uri": "[uri(concat('https://',parameters('playbook4-TaniumServerHost')), '/playbook?type=add_defender_health')]"
+                "uri": "[uri('https://',concat(parameters('playbook4-TaniumForwarderHost'), '/playbook?type=add_defender_health'))]"
               }
             }
           }
@@ -743,7 +743,7 @@
                   "Authorization": "[parameters('playbook5-ForwarderAPIToken')]"
                 },
                 "method": "POST",
-                "uri": "[uri(concat('https://',parameters('playbook5-TaniumServerHost')), '/playbook?type=add_sccm_health')]"
+                "uri": "[uri('https://',concat(parameters('playbook5-TaniumForwarderHost'), '/playbook?type=add_sccm_health'))]"
               }
             }
           }
@@ -855,7 +855,7 @@
                   "Authorization": "[parameters('playbook6-ForwarderAPIToken')]"
                 },
                 "method": "POST",
-                "uri": "[uri(concat('https://',parameters('playbook6-TaniumServerHost')), '/playbook?type=quarantine')]"
+                "uri": "[uri('https://',concat(parameters('playbook6-TaniumForwarderHost'), '/playbook?type=quarantine'))]"
               }
             }
           }
@@ -893,40 +893,40 @@
         "triggerThreshold": 0,
         "entityMappings": [
           {
+            "entityType": "URL",
             "fieldMappings": [
               {
                 "identifier": "Url",
                 "columnName": "TaniumUrl"
               }
-            ],
-            "entityType": "URL"
+            ]
           },
           {
+            "entityType": "IP",
             "fieldMappings": [
               {
                 "identifier": "Address",
                 "columnName": "Computer_IP_s"
               }
-            ],
-            "entityType": "IP"
+            ]
           },
           {
+            "entityType": "Host",
             "fieldMappings": [
               {
                 "identifier": "HostName",
                 "columnName": "Computer_Name_s"
               }
-            ],
-            "entityType": "Host"
+            ]
           },
           {
+            "entityType": "Malware",
             "fieldMappings": [
               {
                 "identifier": "Name",
                 "columnName": "TaniumTHRLabel"
               }
-            ],
-            "entityType": "Malware"
+            ]
           }
         ]
       }
@@ -1043,7 +1043,7 @@
       "type": "Microsoft.OperationalInsights/workspaces/providers/metadata",
       "apiVersion": "2021-03-01-preview",
       "properties": {
-        "version": "1.0.4",
+        "version": "1.0.5",
         "kind": "Solution",
         "contentId": "[variables('_sourceId')]",
         "parentId": "[variables('_sourceId')]",
@@ -1068,47 +1068,47 @@
             {
               "kind": "Workbook",
               "contentId": "[variables('_TaniumWorkbook_workbook')]",
-              "version": "1.0.4"
+              "version": "1.0.5"
             },
             {
               "kind": "Playbook",
               "contentId": "[variables('_playbook1-Tanium-CloseTHRAlert')]",
-              "version": "1.0.4"
+              "version": "1.0.5"
             },
             {
               "kind": "Playbook",
               "contentId": "[variables('_playbook2-Tanium-AddComment')]",
-              "version": "1.0.4"
+              "version": "1.0.5"
             },
             {
               "kind": "Playbook",
               "contentId": "[variables('_playbook3-Tanium-CollectComplyFindings')]",
-              "version": "1.0.4"
+              "version": "1.0.5"
             },
             {
               "kind": "Playbook",
               "contentId": "[variables('_playbook4-Tanium-CollectDefenderStatus')]",
-              "version": "1.0.4"
+              "version": "1.0.5"
             },
             {
               "kind": "Playbook",
               "contentId": "[variables('_playbook5-Tanium-CollectSCCMClientStatus')]",
-              "version": "1.0.4"
+              "version": "1.0.5"
             },
             {
               "kind": "Playbook",
               "contentId": "[variables('_playbook6-Tanium-QuarantineHosts')]",
-              "version": "1.0.4"
+              "version": "1.0.5"
             },
             {
               "kind": "AnalyticsRule",
               "contentId": "[variables('_TaniumThreatResponseAlerts_AnalyticalRules')]",
-              "version": "1.0.4"
+              "version": "1.0.5"
             },
             {
               "kind": "DataConnector",
               "contentId": "[variables('_TaniumConnectorConnector')]",
-              "version": "1.0.4"
+              "version": "1.0.5"
             }
           ]
         },

@@ -22,6 +22,6 @@
       "Data Connectors/Connector_REST_API_Tanium.json"
     ],
     "BasePath": "http://localhost:8000",
-    "Version": "1.0.4",
+    "Version": "1.0.5",
     "Metadata": "SolutionMetadata.json"
   }

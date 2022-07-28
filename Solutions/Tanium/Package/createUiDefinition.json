@@ -54,10 +54,10 @@
         "type": "Microsoft.Common.TextBox",
         "label": "Tanium Forwarder Hostname",
         "placeholder": "host.example.com",
-        "toolTip": "URL of the Tanium Server. Should start with \"https://\".",
+        "toolTip": "URL of the Tanium Forwarder. Should start with \"https://\".",
         "constraints": {
           "regex": "[a-z0-9A-Z]{1,256}$",
-          "validationMessage": "Please enter a Tanium Server URL",
+          "validationMessage": "Please enter a Tanium Forwarder URL",
           "required": true
         },
         "visible": true
@@ -67,10 +67,10 @@
         "type": "Microsoft.Common.TextBox",
         "label": "Tanium Forwarder API Key",
         "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-        "toolTip": "API Key of the Tanium Server. Should be in the format of: \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\".",
+        "toolTip": "API Key of the Tanium Forwarder. Should be in the format of: \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\".",
         "constraints": {
           "regex": "[a-z0-9A-Z]{1,256}$",
-          "validationMessage": "Please enter a Tanium Server API Token",
+          "validationMessage": "Please enter a Tanium Forwarder API Token",
           "required": true
         },
         "visible": true
@@ -240,15 +240,15 @@
                 }
               },
               {
-                "name": "playbook1-TaniumServerHost",
+                "name": "playbook1-TaniumForwarderHost",
                 "type": "Microsoft.Common.TextBox",
-                "label": "Tanium Server Host",
+                "label": "Tanium Forwarder Host",
                 "defaultValue": "[basics('taniumforwarderhostname').value]",
-                "toolTip": "Please enter Tanium Server Host",
+                "toolTip": "Please enter Tanium Forwarder Host",
                 "constraints": {
                   "required": true,
                   "regex": "[a-z0-9A-Z]{1,256}$",
-                  "validationMessage": "Please enter the Tanium Server Host"
+                  "validationMessage": "Please enter the Tanium Forwarder Host"
                 }
               },
               {
@@ -316,15 +316,15 @@
                 }
               },
               {
-                "name": "playbook3-TaniumServerHost",
+                "name": "playbook3-TaniumForwarderHost",
                 "type": "Microsoft.Common.TextBox",
-                "label": "Tanium Server Host",
+                "label": "Tanium Forwarder Host",
                 "defaultValue": "[basics('taniumforwarderhostname').value]",
-                "toolTip": "Please enter Tanium Server Host",
+                "toolTip": "Please enter Tanium Forwarder Host",
                 "constraints": {
                   "required": true,
                   "regex": "[a-z0-9A-Z]{1,256}$",
-                  "validationMessage": "Please enter the Tanium Server Host"
+                  "validationMessage": "Please enter the Tanium Forwarder Host"
                 }
               },
               {
@@ -366,15 +366,15 @@
                 }
               },
               {
-                "name": "playbook4-TaniumServerHost",
+                "name": "playbook4-TaniumForwarderHost",
                 "type": "Microsoft.Common.TextBox",
-                "label": "Tanium Server Host",
+                "label": "Tanium Forwarder Host",
                 "defaultValue": "[basics('taniumforwarderhostname').value]",
-                "toolTip": "Please enter Tanium Server Host",
+                "toolTip": "Please enter Tanium Forwarder Host",
                 "constraints": {
                   "required": true,
                   "regex": "[a-z0-9A-Z]{1,256}$",
-                  "validationMessage": "Please enter the Tanium Server Host"
+                  "validationMessage": "Please enter the Tanium Forwarder Host"
                 }
               },
               {
@@ -416,15 +416,15 @@
                 }
               },
               {
-                "name": "playbook5-TaniumServerHost",
+                "name": "playbook5-TaniumForwarderHost",
                 "type": "Microsoft.Common.TextBox",
-                "label": "Tanium Server Host",
+                "label": "Tanium Forwarder Host",
                 "defaultValue": "[basics('taniumforwarderhostname').value]",
-                "toolTip": "Please enter Tanium Server Host",
+                "toolTip": "Please enter Tanium Forwarder Host",
                 "constraints": {
                   "required": true,
                   "regex": "[a-z0-9A-Z]{1,256}$",
-                  "validationMessage": "Please enter the Tanium Server Host"
+                  "validationMessage": "Please enter the Tanium Forwarder Host"
                 }
               },
               {
@@ -466,15 +466,15 @@
                 }
               },
               {
-                "name": "playbook6-TaniumServerHost",
+                "name": "playbook6-TaniumForwarderHost",
                 "type": "Microsoft.Common.TextBox",
-                "label": "Tanium Server Host",
+                "label": "Tanium Forwarder Host",
                 "defaultValue": "[basics('taniumforwarderhostname').value]",
-                "toolTip": "Please enter Tanium Server Host",
+                "toolTip": "Please enter Tanium Forwarder Host",
                 "constraints": {
                   "required": true,
                   "regex": "[a-z0-9A-Z]{1,256}$",
-                  "validationMessage": "Please enter the Tanium Server Host"
+                  "validationMessage": "Please enter the Tanium Forwarder Host"
                 }
               },
               {
@@ -500,20 +500,20 @@
       "workspace": "[basics('workspace')]",
       "workbook1-name": "[steps('workbooks').workbook1.workbook1-name]",
       "playbook1-PlaybookName": "[steps('playbooks').playbook1.playbook1-PlaybookName]",
-      "playbook1-TaniumServerHost": "[steps('playbooks').playbook1.playbook1-TaniumServerHost]",
+      "playbook1-TaniumForwarderHost": "[steps('playbooks').playbook1.playbook1-TaniumForwarderHost]",
       "playbook1-ForwarderAPIToken": "[steps('playbooks').playbook1.playbook1-ForwarderAPIToken]",
       "playbook2-PlaybookName": "[steps('playbooks').playbook2.playbook2-PlaybookName]",
       "playbook3-PlaybookName": "[steps('playbooks').playbook3.playbook3-PlaybookName]",
-      "playbook3-TaniumServerHost": "[steps('playbooks').playbook3.playbook3-TaniumServerHost]",
+      "playbook3-TaniumForwarderHost": "[steps('playbooks').playbook3.playbook3-TaniumForwarderHost]",
       "playbook3-ForwarderAPIToken": "[steps('playbooks').playbook3.playbook3-ForwarderAPIToken]",
       "playbook4-PlaybookName": "[steps('playbooks').playbook4.playbook4-PlaybookName]",
-      "playbook4-TaniumServerHost": "[steps('playbooks').playbook4.playbook4-TaniumServerHost]",
+      "playbook4-TaniumForwarderHost": "[steps('playbooks').playbook4.playbook4-TaniumForwarderHost]",
       "playbook4-ForwarderAPIToken": "[steps('playbooks').playbook4.playbook4-ForwarderAPIToken]",
       "playbook5-PlaybookName": "[steps('playbooks').playbook5.playbook5-PlaybookName]",
-      "playbook5-TaniumServerHost": "[steps('playbooks').playbook5.playbook5-TaniumServerHost]",
+      "playbook5-TaniumForwarderHost": "[steps('playbooks').playbook5.playbook5-TaniumForwarderHost]",
       "playbook5-ForwarderAPIToken": "[steps('playbooks').playbook5.playbook5-ForwarderAPIToken]",
       "playbook6-PlaybookName": "[steps('playbooks').playbook6.playbook6-PlaybookName]",
-      "playbook6-TaniumServerHost": "[steps('playbooks').playbook6.playbook6-TaniumServerHost]",
+      "playbook6-TaniumForwarderHost": "[steps('playbooks').playbook6.playbook6-TaniumForwarderHost]",
       "playbook6-ForwarderAPIToken": "[steps('playbooks').playbook6.playbook6-ForwarderAPIToken]"
     }
   }

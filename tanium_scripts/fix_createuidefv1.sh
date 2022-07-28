@@ -4,7 +4,7 @@ set -e
 GEN_FILE="Solutions/Tanium/Package/createUiDefinition.json"
 ORIG_FILE="Solutions/Tanium/Package/createUiDefinition.original.json"
 NEW_FILE="Solutions/Tanium/Package/createUiDefinition.custom.json"
-ZIP_FILE="Solutions/Tanium/Package/1.0.4.zip"
+ZIP_FILE="Solutions/Tanium/Package/1.0.5.zip"
 
 cat "$GEN_FILE" | jq > "$ORIG_FILE"
 cat "$GEN_FILE" |
@@ -13,10 +13,10 @@ cat "$GEN_FILE" |
         "type": "Microsoft.Common.TextBox",
         "label": "Tanium Forwarder Hostname",
         "placeholder": "host.example.com",
-        "toolTip": "URL of the Tanium Server. Should start with \"https://\".",
+        "toolTip": "URL of the Tanium Forwarder. Should start with \"https://\".",
         "constraints": {
           "regex": "[a-z0-9A-Z]{1,256}$",
-          "validationMessage": "Please enter a Tanium Server URL",
+          "validationMessage": "Please enter a Tanium Forwarder URL",
           "required": true
         },
         "visible": true
@@ -26,10 +26,10 @@ cat "$GEN_FILE" |
         "type": "Microsoft.Common.TextBox",
         "label": "Tanium Forwarder API Key",
         "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-        "toolTip": "API Key of the Tanium Server. Should be in the format of: \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\".",
+        "toolTip": "API Key of the Tanium Forwarder. Should be in the format of: \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\".",
         "constraints": {
           "regex": "[a-z0-9A-Z]{1,256}$",
-          "validationMessage": "Please enter a Tanium Server API Token",
+          "validationMessage": "Please enter a Tanium Forwarder API Token",
           "required": true
         },
         "visible": true

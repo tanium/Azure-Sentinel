@@ -11,7 +11,6 @@ v1:
 	rm -f ./Solutions/Tanium/Package/*
 	./tanium_scripts/buildv1.sh
 
-# run after build for v1
 fix_createuidef:
 	./tanium_scripts/fix_createuidefv1.sh 
 
