@@ -159,7 +159,7 @@
     },
     "connector1-name": {
       "type": "string",
-      "defaultValue": "be987979-655d-4097-b695-1f29fa9b9500"
+      "defaultValue": "f4a50737-48cd-47f4-9701-728463564a2a"
     }
   },
   "variables": {
@@ -193,7 +193,7 @@
     "_connector1-source": "[variables('connector1-source')]",
     "TaniumConnectorConnector": "TaniumConnectorConnector",
     "_TaniumConnectorConnector": "[variables('TaniumConnectorConnector')]",
-    "sourceId": "taniuminc1646329360287.azure-sentinel-solution-tanium",
+    "sourceId": "taniuminc1646329360287.tanium_sentinel_connector",
     "_sourceId": "[variables('sourceId')]"
   },
   "resources": [
@@ -893,40 +893,40 @@
         "triggerThreshold": 0,
         "entityMappings": [
           {
-            "entityType": "URL",
             "fieldMappings": [
               {
                 "identifier": "Url",
                 "columnName": "TaniumUrl"
               }
-            ]
+            ],
+            "entityType": "URL"
           },
           {
-            "entityType": "IP",
             "fieldMappings": [
               {
                 "identifier": "Address",
                 "columnName": "Computer_IP_s"
               }
-            ]
+            ],
+            "entityType": "IP"
           },
           {
-            "entityType": "Host",
             "fieldMappings": [
               {
                 "identifier": "HostName",
                 "columnName": "Computer_Name_s"
               }
-            ]
+            ],
+            "entityType": "Host"
           },
           {
-            "entityType": "Malware",
             "fieldMappings": [
               {
                 "identifier": "Name",
                 "columnName": "TaniumTHRLabel"
               }
-            ]
+            ],
+            "entityType": "Malware"
           }
         ]
       }
