@@ -159,7 +159,7 @@
     },
     "connector1-name": {
       "type": "string",
-      "defaultValue": "05820497-ebb1-4293-899c-a8eb95f40795"
+      "defaultValue": "483c03b8-faa9-4e16-85f8-993ff0a6d673"
     }
   },
   "variables": {
@@ -880,7 +880,7 @@
       "kind": "Scheduled",
       "location": "[parameters('workspace-location')]",
       "properties": {
-        "description": "Alerts from Tanium Threat Response (THR) that can be acted upon by Azure Sentinel Playbook",
+        "description": "Alerts from Tanium Threat Response (THR) that can be acted upon by Microsoft Sentinel Playbook",
         "displayName": "Tanium Threat Response Alerts",
         "enabled": false,
         "query": "let cap = (s:string) { strcat(toupper(substring(s,0,1)), substring(s,1))  };\nTaniumThreatResponse_CL\n| extend TaniumUrl = pack(\"computer_name\", Computer_Name_s, \"alert_guid\", Alert_Id_g, \"ip_address\", Computer_IP_s, \"platform\", Match_Details_finding_system_info_platform_s)\n| extend TaniumTHRLabel = strcat(cap(Intel_Type_s),\" - \", cap(Intel_Name_s), \" - \", cap(Match_Details_match_type_s))\n| where Computer_IP_s !contains \"N/A\"\n",
@@ -893,40 +893,40 @@
         "triggerThreshold": 0,
         "entityMappings": [
           {
+            "entityType": "URL",
             "fieldMappings": [
               {
                 "identifier": "Url",
                 "columnName": "TaniumUrl"
               }
-            ],
-            "entityType": "URL"
+            ]
           },
           {
+            "entityType": "IP",
             "fieldMappings": [
               {
                 "identifier": "Address",
                 "columnName": "Computer_IP_s"
               }
-            ],
-            "entityType": "IP"
+            ]
           },
           {
+            "entityType": "Host",
             "fieldMappings": [
               {
                 "identifier": "HostName",
                 "columnName": "Computer_Name_s"
               }
-            ],
-            "entityType": "Host"
+            ]
           },
           {
+            "entityType": "Malware",
             "fieldMappings": [
               {
                 "identifier": "Name",
                 "columnName": "TaniumTHRLabel"
               }
-            ],
-            "entityType": "Malware"
+            ]
           }
         ]
       }
@@ -942,7 +942,7 @@
         "connectorUiConfig": {
           "title": "Tanium Connector",
           "publisher": "Tanium",
-          "descriptionMarkdown": "The [Tanium](https://tanium.com) connector allows you to easily connect your Tanium platform to Azure Sentinel via [Tanium Connect](https://docs.tanium.com/connect/connect/index.html). This will enable Tanium to send [Tanium Threat Response Alerts](https://docs.tanium.com/threat_response/threat_response/index.html) and other data into the Azure Sentinel platform. This gives you insight to better view and control your environment.",
+          "descriptionMarkdown": "The [Tanium](https://tanium.com) connector allows you to easily connect your Tanium platform to Microsoft Sentinel via [Tanium Connect](https://docs.tanium.com/connect/connect/index.html). This will enable Tanium to send [Tanium Threat Response Alerts](https://docs.tanium.com/threat_response/threat_response/index.html) and other data into the Microsoft Sentinel platform. This gives you insight to better view and control your environment.",
           "graphQueries": [
             {
               "metricName": "Total data received",
@@ -1043,7 +1043,7 @@
       "type": "Microsoft.OperationalInsights/workspaces/providers/metadata",
       "apiVersion": "2021-03-01-preview",
       "properties": {
-        "version": "1.0.6",
+        "version": "1.0.7",
         "kind": "Solution",
         "contentId": "[variables('_sourceId')]",
         "parentId": "[variables('_sourceId')]",
@@ -1068,47 +1068,47 @@
             {
               "kind": "Workbook",
               "contentId": "[variables('_TaniumWorkbook_workbook')]",
-              "version": "1.0.6"
+              "version": "1.0.7"
             },
             {
               "kind": "Playbook",
               "contentId": "[variables('_playbook1-Tanium-CloseTHRAlert')]",
-              "version": "1.0.6"
+              "version": "1.0.7"
             },
             {
               "kind": "Playbook",
               "contentId": "[variables('_playbook2-Tanium-AddComment')]",
-              "version": "1.0.6"
+              "version": "1.0.7"
             },
             {
               "kind": "Playbook",
               "contentId": "[variables('_playbook3-Tanium-CollectComplyFindings')]",
-              "version": "1.0.6"
+              "version": "1.0.7"
             },
             {
               "kind": "Playbook",
               "contentId": "[variables('_playbook4-Tanium-CollectDefenderStatus')]",
-              "version": "1.0.6"
+              "version": "1.0.7"
             },
             {
               "kind": "Playbook",
               "contentId": "[variables('_playbook5-Tanium-CollectSCCMClientStatus')]",
-              "version": "1.0.6"
+              "version": "1.0.7"
             },
             {
               "kind": "Playbook",
               "contentId": "[variables('_playbook6-Tanium-QuarantineHosts')]",
-              "version": "1.0.6"
+              "version": "1.0.7"
             },
             {
               "kind": "AnalyticsRule",
               "contentId": "[variables('_TaniumThreatResponseAlerts_AnalyticalRules')]",
-              "version": "1.0.6"
+              "version": "1.0.7"
             },
             {
               "kind": "DataConnector",
               "contentId": "[variables('_TaniumConnectorConnector')]",
-              "version": "1.0.6"
+              "version": "1.0.7"
             }
           ]
         },
