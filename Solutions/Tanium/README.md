@@ -3,7 +3,7 @@
 <img src="./images/Tanium.svg" alt="Tanium" width="20%"/><br>
 
 ## Overview
-Tanium Sentinel integration packages help you import / visualize Tanium data and act on these findings from within Sentinel.
+Tanium Sentinel integration packages help you import / visualize Tanium data and act on these findings from within Azure Sentinel.
 
 
 ## Installation
@@ -20,7 +20,7 @@ Tanium Sentinel integration packages help you import / visualize Tanium data and
 - Resource Group (picker)
 - Workspace-location
 - Note: this is something like `westus` not `West US`... it must match where your api connection lives [see note below](#help-workspace-location))
-- Workspace (the name of your Sentinel workspace)
+- Workspace (the name of your Azure Sentinel workspace)
 - Playbook1-Forwarder API Token (the API token for your forwarder)
 - Playbook2-Forwarder API Token (the API token for your forwarder)
 - Playbook3-Forwarder API Token (the API token for your forwarder)

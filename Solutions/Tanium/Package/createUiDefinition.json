@@ -188,7 +188,7 @@
                 "name": "analytic1-text",
                 "type": "Microsoft.Common.TextBlock",
                 "options": {
-                  "text": "Alerts from Tanium Threat Response (THR) that can be acted upon by Tanium Sentinel Playbook"
+                  "text": "Alerts from Tanium Threat Response (THR) that can be acted upon by Azure Sentinel Playbook"
                 }
               }
             ]
@@ -224,7 +224,7 @@
                 "name": "playbook1-text",
                 "type": "Microsoft.Common.TextBlock",
                 "options": {
-                  "text": "This playbook uses your Tanium Server to close THR Alerts associated with Sentinel Incidents"
+                  "text": "This playbook uses your Tanium Server to close THR Alerts associated with Azure Sentinel Incidents"
                 }
               },
               {
@@ -274,7 +274,7 @@
                 "name": "playbook2-text",
                 "type": "Microsoft.Common.TextBlock",
                 "options": {
-                  "text": "This playbook will add a comment to a Microsoft Sentinel incident."
+                  "text": "This playbook will add a comment to an Azure Sentinel incident."
                 }
               },
               {
@@ -300,7 +300,7 @@
                 "name": "playbook3-text",
                 "type": "Microsoft.Common.TextBlock",
                 "options": {
-                  "text": "This playbook uses your Tanium Server to gather Comply failures related to hosts associated with Sentinel Incidents"
+                  "text": "This playbook uses your Tanium Server to gather Comply failures related to hosts associated with Azure Sentinel Incidents"
                 }
               },
               {
@@ -350,7 +350,7 @@
                 "name": "playbook4-text",
                 "type": "Microsoft.Common.TextBlock",
                 "options": {
-                  "text": "This playbook uses your Tanium Server to gather Defender statuses related to hosts associated with Sentinel Incidents"
+                  "text": "This playbook uses your Tanium Server to gather Defender statuses related to hosts associated with Azure Sentinel Incidents"
                 }
               },
               {
@@ -400,7 +400,7 @@
                 "name": "playbook5-text",
                 "type": "Microsoft.Common.TextBlock",
                 "options": {
-                  "text": "This playbook uses your Tanium Server to gather SCCM client statuses related to hosts associated with Sentinel Incidents"
+                  "text": "This playbook uses your Tanium Server to gather SCCM client statuses related to hosts associated with Azure Sentinel Incidents"
                 }
               },
               {
@@ -450,7 +450,7 @@
                 "name": "playbook6-text",
                 "type": "Microsoft.Common.TextBlock",
                 "options": {
-                  "text": "This playbook uses your Tanium Server to quarantine hosts associated with Sentinel Incidents"
+                  "text": "This playbook uses your Tanium Server to quarantine hosts associated with Azure Sentinel Incidents"
                 }
               },
               {

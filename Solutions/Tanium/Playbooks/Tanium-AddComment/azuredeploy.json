@@ -2,7 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "metadata": {
-        "comments": "This playbook will add a comment to a Microsoft Sentinel incident."
+        "comments": "This playbook will add a comment to an Azure Sentinel incident."
     },
     "parameters": {
         "PlaybookName": {
