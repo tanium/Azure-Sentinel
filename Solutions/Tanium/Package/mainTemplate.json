@@ -159,7 +159,7 @@
     },
     "connector1-name": {
       "type": "string",
-      "defaultValue": "483c03b8-faa9-4e16-85f8-993ff0a6d673"
+      "defaultValue": "f585ba99-b428-41cf-a2a3-2d9ecd8f50eb"
     }
   },
   "variables": {
@@ -896,8 +896,8 @@
             "entityType": "URL",
             "fieldMappings": [
               {
-                "identifier": "Url",
-                "columnName": "TaniumUrl"
+                "columnName": "TaniumUrl",
+                "identifier": "Url"
               }
             ]
           },
@@ -905,8 +905,8 @@
             "entityType": "IP",
             "fieldMappings": [
               {
-                "identifier": "Address",
-                "columnName": "Computer_IP_s"
+                "columnName": "Computer_IP_s",
+                "identifier": "Address"
               }
             ]
           },
@@ -914,8 +914,8 @@
             "entityType": "Host",
             "fieldMappings": [
               {
-                "identifier": "HostName",
-                "columnName": "Computer_Name_s"
+                "columnName": "Computer_Name_s",
+                "identifier": "HostName"
               }
             ]
           },
@@ -923,8 +923,8 @@
             "entityType": "Malware",
             "fieldMappings": [
               {
-                "identifier": "Name",
-                "columnName": "TaniumTHRLabel"
+                "columnName": "TaniumTHRLabel",
+                "identifier": "Name"
               }
             ]
           }
@@ -1043,7 +1043,7 @@
       "type": "Microsoft.OperationalInsights/workspaces/providers/metadata",
       "apiVersion": "2021-03-01-preview",
       "properties": {
-        "version": "1.0.7",
+        "version": "1.0.8",
         "kind": "Solution",
         "contentId": "[variables('_sourceId')]",
         "parentId": "[variables('_sourceId')]",
@@ -1068,47 +1068,47 @@
             {
               "kind": "Workbook",
               "contentId": "[variables('_TaniumWorkbook_workbook')]",
-              "version": "1.0.7"
+              "version": "1.0.8"
             },
             {
               "kind": "Playbook",
               "contentId": "[variables('_playbook1-Tanium-CloseTHRAlert')]",
-              "version": "1.0.7"
+              "version": "1.0.8"
             },
             {
               "kind": "Playbook",
               "contentId": "[variables('_playbook2-Tanium-AddComment')]",
-              "version": "1.0.7"
+              "version": "1.0.8"
             },
             {
               "kind": "Playbook",
               "contentId": "[variables('_playbook3-Tanium-CollectComplyFindings')]",
-              "version": "1.0.7"
+              "version": "1.0.8"
             },
             {
               "kind": "Playbook",
               "contentId": "[variables('_playbook4-Tanium-CollectDefenderStatus')]",
-              "version": "1.0.7"
+              "version": "1.0.8"
             },
             {
               "kind": "Playbook",
               "contentId": "[variables('_playbook5-Tanium-CollectSCCMClientStatus')]",
-              "version": "1.0.7"
+              "version": "1.0.8"
             },
             {
               "kind": "Playbook",
               "contentId": "[variables('_playbook6-Tanium-QuarantineHosts')]",
-              "version": "1.0.7"
+              "version": "1.0.8"
             },
             {
               "kind": "AnalyticsRule",
               "contentId": "[variables('_TaniumThreatResponseAlerts_AnalyticalRules')]",
-              "version": "1.0.7"
+              "version": "1.0.8"
             },
             {
               "kind": "DataConnector",
               "contentId": "[variables('_TaniumConnectorConnector')]",
-              "version": "1.0.7"
+              "version": "1.0.8"
             }
           ]
         },
