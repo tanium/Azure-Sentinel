@@ -119,7 +119,7 @@
                   "Authorization": "[parameters('ForwarderAPIToken')]"
                 },
                 "method": "POST",
-                "uri": "[uri('https://',concat(parameters('TaniumForwarderHost'), '/playbook?type=add_comply_findings'))]"
+                "uri": "[uri(concat('https://',parameters('TaniumForwarderHost')), '/playbook?type=add_comply_findings')]"
               }
             }
           },
