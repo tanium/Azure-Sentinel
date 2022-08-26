@@ -8,6 +8,9 @@
     "Workbooks/TaniumWorkbook.json"
   ],
   "Playbooks": [
+    "Playbooks/Tanium-GeneralHostInfo/azuredeploy.json"
+  ],
+  "_Playbooks": [
     "Playbooks/Tanium-GeneralHostInfo/azuredeploy.json",
     "Playbooks/Tanium-QuarantineHosts/azuredeploy.json",
     "Playbooks/Tanium-ResolveThreatResponseAlert/azuredeploy.json",
