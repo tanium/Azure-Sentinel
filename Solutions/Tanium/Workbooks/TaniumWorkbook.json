@@ -33,24 +33,24 @@
             "style": "link"
           },
           {
-            "id": "a34745a8-6073-484d-adc5-d5c8e7fb9209",
-            "cellValue": "selectedTab",
-            "linkTarget": "parameter",
-            "linkLabel": "Microsoft Tooling Health",
-            "subTarget": "Microsoft Tooling Health",
-            "style": "link"
-          },
-          {
             "id": "32a1a85f-978f-4b42-b27f-41cfb90e4e14",
             "cellValue": "selectedTab",
             "linkTarget": "parameter",
             "linkLabel": "Patch",
             "subTarget": "Patch",
             "style": "link"
+          },
+          {
+            "id": "2847a7be-16d9-4269-91c3-bcada72fd522",
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Microsoft Defender Health",
+            "subTarget": "Microsoft Defender Health",
+            "style": "link"
           }
         ]
       },
-      "name": "links - 8"
+      "name": "Top Level"
     },
     {
       "type": 12,
@@ -71,6 +71,9 @@
               "version": "KqlItem/1.0",
               "query": "TaniumComplyVulnerabilities_CL \n| join TaniumMainAsset_CL on Computer_Name_s| where CVSS_Score_s startswith \"9\"\n| extend Host_0_HostName = Computer_Name_s\n| extend Malware_0_Name = CVE_s\n| extend IP_0_Address = IP_Address_s\n| summarize count() by Computer_Name_s | limit 4\n| sort by count_\n",
               "size": 4,
+              "timeContext": {
+                "durationMs": 2592000000
+              },
               "queryType": 0,
               "resourceType": "microsoft.operationalinsights/workspaces",
               "visualization": "tiles",
@@ -299,7 +302,7 @@
               "query": "TaniumComplyVulnerabilities_CL\n|join kind=inner TaniumMainAsset_CL on Computer_Name_s\n|distinct CVE_s,Computer_Name_s,CVSS_Score_s, Operating_System_Generation_s\n|summarize  CVECount=dcount(CVE_s), cvss_endpoint_score=sum(todecimal(CVSS_Score_s)) by Computer_Name_s, Operating_System_Generation_s\n|project cvss_endpoint_score, CVECount, Computer_Name_s, Operating_System_Generation_s\n|render scatterchart\n|sort by cvss_endpoint_score asc",
               "size": 0,
               "timeContext": {
-                "durationMs": 604800000
+                "durationMs": 2592000000
               },
               "queryType": 0,
               "resourceType": "microsoft.operationalinsights/workspaces",
@@ -382,7 +385,7 @@
               "query": "TaniumComplyCompliance_CL | where  Rule_ID_s <> \"\"\n|summarize  Total=count(), Pass=countif(Status_Category_s has \"Pass\"), Fail=countif(Status_Category_s has \"Fail\")\n|extend PassRate=(Pass*1.0/Total)*100\n|project PassRate",
               "size": 1,
               "timeContext": {
-                "durationMs": 604800000
+                "durationMs": 2592000000
               },
               "queryType": 0,
               "resourceType": "microsoft.operationalinsights/workspaces",
@@ -520,7 +523,7 @@
               "query": "TaniumDiscoverUnmanagedAssets_CL\n| where HostName_s <> \"\"\n| project Hostname=HostName_s, MacAddres=MacAddress_s, IPAddress, MacOrganization=MacOrganization_s, LastDiscoveredTime=LastDiscoveredAt_s\n| sort by LastDiscoveredTime",
               "size": 0,
               "timeContext": {
-                "durationMs": 86400000
+                "durationMs": 2592000000
               },
               "queryType": 0,
               "resourceType": "microsoft.operationalinsights/workspaces"
@@ -535,145 +538,6 @@
         "value": "Discover"
       },
       "name": "discover_group"
-    },
-    {
-      "type": 12,
-      "content": {
-        "version": "NotebookGroup/1.0",
-        "groupType": "editable",
-        "title": "MIcrosoft Tooling Health ",
-        "items": [
-          {
-            "type": 1,
-            "content": {
-              "json": "## Defender AV Status"
-            },
-            "name": "text - 0"
-          },
-          {
-            "type": 3,
-            "content": {
-              "version": "KqlItem/1.0",
-              "query": "TaniumDefenderHealth_CL\n|where Antivirus_State_s <> \"\"\n|summarize count () by Antivirus_State_s\n|project Antivirus_State=Antivirus_State_s, Count=count_\n|render piechart    \n",
-              "size": 0,
-              "timeContext": {
-                "durationMs": 86400000
-              },
-              "queryType": 0,
-              "resourceType": "microsoft.operationalinsights/workspaces"
-            },
-            "name": "query - 1"
-          },
-          {
-            "type": 1,
-            "content": {
-              "json": "## Defender AV Process Status"
-            },
-            "name": "text - 2"
-          },
-          {
-            "type": 3,
-            "content": {
-              "version": "KqlItem/1.0",
-              "query": "TaniumDefenderHealth_CL\n|where Defender_Process_s <> \"\"\n|summarize count () by Defender_Process_s\n|project Defender_Process_Status=Defender_Process_s, Count=count_\n|render piechart    \n",
-              "size": 0,
-              "timeContext": {
-                "durationMs": 86400000
-              },
-              "queryType": 0,
-              "resourceType": "microsoft.operationalinsights/workspaces"
-            },
-            "name": "query - 3"
-          },
-          {
-            "type": 1,
-            "content": {
-              "json": "## Defender AV Signature Update Age"
-            },
-            "name": "text - 4"
-          },
-          {
-            "type": 3,
-            "content": {
-              "version": "KqlItem/1.0",
-              "query": "TaniumDefenderHealth_CL\n|where Signature_Update_Age_s <> \"\"\n|summarize count () by Signature_Update_Age=Signature_Update_Age_s\n|project Signature_Update_Age=Signature_Update_Age, Count=count_\n|render columnchart    ",
-              "size": 0,
-              "timeContext": {
-                "durationMs": 86400000
-              },
-              "queryType": 0,
-              "resourceType": "microsoft.operationalinsights/workspaces"
-            },
-            "name": "query - 5"
-          }
-        ]
-      },
-      "conditionalVisibility": {
-        "parameterName": "selectedTab",
-        "comparison": "isEqualTo",
-        "value": "Microsoft Tooling Health"
-      },
-      "customWidth": "50",
-      "name": "group - 5"
-    },
-    {
-      "type": 12,
-      "content": {
-        "version": "NotebookGroup/1.0",
-        "groupType": "editable",
-        "title": "MEMCM Health",
-        "items": [
-          {
-            "type": 1,
-            "content": {
-              "json": "## MEMCM Health Status"
-            },
-            "name": "text - 0"
-          },
-          {
-            "type": 3,
-            "content": {
-              "version": "KqlItem/1.0",
-              "query": "TaniumSCCMClientHealth_CL\n|where Health_Status_s !has \"N/A\"\n|project Computer_Name=Computer_Name_s,Health_Status=Health_Status_s, Reason=Reason_s",
-              "size": 0,
-              "timeContext": {
-                "durationMs": 86400000
-              },
-              "queryType": 0,
-              "resourceType": "microsoft.operationalinsights/workspaces"
-            },
-            "name": "query - 1"
-          },
-          {
-            "type": 1,
-            "content": {
-              "json": "## MEMCM Health Issues"
-            },
-            "name": "text - 2"
-          },
-          {
-            "type": 3,
-            "content": {
-              "version": "KqlItem/1.0",
-              "query": "TaniumSCCMClientHealth_CL\n|where Reason_s <> \"\"\n|summarize count() by Reason_s\n|project Health_Status=Reason_s,Count=count_\n|render piechart",
-              "size": 0,
-              "timeContext": {
-                "durationMs": 86400000
-              },
-              "queryType": 0,
-              "resourceType": "microsoft.operationalinsights/workspaces"
-            },
-            "name": "query - 3"
-          }
-        ]
-      },
-      "conditionalVisibility": {
-        "parameterName": "selectedTab",
-        "comparison": "isEqualTo",
-        "value": "Microsoft Tooling Health"
-      },
-      "customWidth": "50",
-      "name": "sccm_group"
     },
     {
       "type": 12,
@@ -703,51 +567,56 @@
             "name": "query - 0"
           },
           {
-            "type": 1,
+            "type": 3,
             "content": {
-              "json": "## Threat Response Alert Types"
+              "version": "KqlItem/1.0",
+              "query": "TaniumThreatResponse_CL\n| summarize Count=count() by Intel_Name_s\n| render piechart",
+              "size": 3,
+              "title": "Threat Response Intel Names (last 30 days)",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces"
             },
-            "name": "text - 2"
+            "name": "Threat Response Intel Names (last 30 days)"
           },
           {
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
               "query": "TaniumThreatResponse_CL\n| summarize count() by Intel_Type_s\n| render piechart  ",
-              "size": 0,
+              "size": 3,
+              "title": "Threat Response Alert Types (last 30 days)",
               "timeContext": {
                 "durationMs": 2592000000
               },
               "queryType": 0,
               "resourceType": "microsoft.operationalinsights/workspaces"
             },
-            "name": "query - 3"
-          },
-          {
-            "type": 1,
-            "content": {
-              "json": "## THR Alert by User\n"
-            },
-            "name": "text - 4"
+            "customWidth": "50",
+            "name": "Threat Response Alert Types (last 30 days)"
           },
           {
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
               "query": "TaniumThreatResponse_CL\n| summarize count() by Match_Details_match_properties_user_s\n| render piechart  ",
-              "size": 0,
+              "size": 3,
+              "title": "Threat Response Alerts by User (last 30 days)",
               "timeContext": {
                 "durationMs": 2592000000
               },
               "queryType": 0,
               "resourceType": "microsoft.operationalinsights/workspaces"
             },
-            "name": "query - 5"
+            "customWidth": "50",
+            "name": "Threat Response Alerts by User (last 30 days)"
           },
           {
             "type": 1,
             "content": {
-              "json": "## Threat Response Alerts by Process Name"
+              "json": "## Process Names over time"
             },
             "name": "text - 6"
           },
@@ -804,7 +673,7 @@
           {
             "type": 1,
             "content": {
-              "json": "## Reboot Required"
+              "json": "## Reboot Required (last 30 days)"
             },
             "name": "text - 0"
           },
@@ -812,16 +681,21 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "TaniumHighUptime_CL\n|project TimeGenerated, Computer_Name_s,Reboot_Required_s\n|where Reboot_Required_s contains \"Yes\"\n|count",
-              "size": 4,
+              "query": "TaniumHighUptime_CL\n|project TimeGenerated, Computer_Name_s,Reboot_Required_s\n|where Reboot_Required_s contains \"Yes\"\n|summarize Count = count() by TimeGenerated",
+              "size": 0,
               "timeContext": {
-                "durationMs": 86400000
+                "durationMs": 2592000000
               },
               "queryType": 0,
               "resourceType": "microsoft.operationalinsights/workspaces",
-              "visualization": "card",
+              "visualization": "timechart",
               "tileSettings": {
                 "showBorder": false
+              },
+              "chartSettings": {
+                "ySettings": {
+                  "min": 0
+                }
               },
               "textSettings": {
                 "style": "bignumber"
@@ -832,7 +706,7 @@
           {
             "type": 1,
             "content": {
-              "json": "## Endpoints with High Uptime (>30 days)"
+              "json": "## Most recent high uptime endpoints"
             },
             "name": "text - 2"
           },
@@ -840,10 +714,10 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "TaniumHighUptime_CL\n|where High_Uptime_s !in (\"Less than 30\", \"N/A\")\n|extend Days=split(High_Uptime_s,\" \",0)\n|project Computer_Name=Computer_Name_s,toint(Days=Days[0])",
+              "query": "TaniumHighUptime_CL\n|where High_Uptime_s !in (\"Less than 30\", \"N/A\")\n|extend Days=split(High_Uptime_s,\" \",0)\n|project Computer_Name=Computer_Name_s,toint(Days=Days[0]),TimeGenerated\n|summarize arg_max(TimeGenerated, Days, Computer_Name) by Computer_Name\n|project TimeGenerated,Computer_Name,Days\n|order by Days",
               "size": 1,
               "timeContext": {
-                "durationMs": 86400000
+                "durationMs": 2592000000
               },
               "queryType": 0,
               "resourceType": "microsoft.operationalinsights/workspaces",
@@ -892,7 +766,7 @@
               "query": "TaniumPatchListCompliance_CL\n|where Patch_List_Name_s == \"All Patches\"\n|summarize count () by Compliance_Status_s\n|render piechart ",
               "size": 0,
               "timeContext": {
-                "durationMs": 86400000
+                "durationMs": 2592000000
               },
               "queryType": 0,
               "resourceType": "microsoft.operationalinsights/workspaces"
@@ -913,7 +787,7 @@
               "query": "TaniumPatchListApplicability_CL\n|where Superseded_s has \"False\" and Install_Status_s has \"Not Installed\"\n|summarize count() by Severity_s\n|render piechart ",
               "size": 0,
               "timeContext": {
-                "durationMs": 86400000
+                "durationMs": 2592000000
               },
               "queryType": 0,
               "resourceType": "microsoft.operationalinsights/workspaces"
@@ -934,7 +808,7 @@
               "query": "TaniumPatchListApplicability_CL\n|where Superseded_s has \"false\"\n|summarize count() by Install_Status_s,Severity_s",
               "size": 0,
               "timeContext": {
-                "durationMs": 86400000
+                "durationMs": 2592000000
               },
               "queryType": 0,
               "resourceType": "microsoft.operationalinsights/workspaces",
@@ -968,7 +842,7 @@
               "query": "TaniumPatchListApplicability_CL\n|distinct Title_s,Install_Status_s,Severity_s,Release_Date_s\n|where Install_Status_s has \"Not Installed\"\n|where Severity_s in (\"Critical\", \"Important\")\n|extend Year=(split(Release_Date_s,\"/\",2))\n|summarize count() by Year=tostring(Year[0])",
               "size": 0,
               "timeContext": {
-                "durationMs": 86400000
+                "durationMs": 2592000000
               },
               "queryType": 0,
               "resourceType": "microsoft.operationalinsights/workspaces",
@@ -984,6 +858,1218 @@
         "value": "Patch"
       },
       "name": "Patch"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "title": "Microsoft Defender (last 24 hours)",
+        "items": [
+          {
+            "type": 12,
+            "content": {
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "title": "Agent Health",
+              "items": [
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| summarize by Microsoft_Defender_Installed_s, Computer_ID_s\n| summarize Count = count() by Microsoft_Defender_Installed_s\n| render piechart",
+                    "size": 0,
+                    "title": "Installed",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "exportFieldName": "series",
+                    "exportParameterName": "defenderInstalled",
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces",
+                    "chartSettings": {
+                      "seriesLabelSettings": [
+                        {
+                          "seriesName": "True",
+                          "color": "green"
+                        }
+                      ]
+                    }
+                  },
+                  "customWidth": "50",
+                  "name": "Agent Installed"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| extend // booleans\n    Microsoft_Defender_Installed_b=tobool(Microsoft_Defender_Installed_s),\n    Microsoft_Defender_Healthy_b=tobool(Microsoft_Defender_Healthy_s)\n| where Microsoft_Defender_Installed_b\n| extend Microsoft_Defender_Health=case(Microsoft_Defender_Healthy_b, \"Healthy\", Microsoft_Defender_Health_Issues_s)\n| summarize by Microsoft_Defender_Healthy_b, Microsoft_Defender_Health, Computer_ID_s\n| summarize Count = count() by Microsoft_Defender_Health\n| render piechart",
+                    "size": 0,
+                    "title": "Health Statuses",
+                    "noDataMessage": "Unable to query for agent health: is Tanium Connect sending data?",
+                    "noDataMessageStyle": 4,
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "exportFieldName": "series",
+                    "exportParameterName": "defenderHealthStatus",
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces",
+                    "chartSettings": {
+                      "seriesLabelSettings": [
+                        {
+                          "seriesName": "Healthy",
+                          "color": "green"
+                        }
+                      ]
+                    }
+                  },
+                  "customWidth": "50",
+                  "name": "Health Statuses"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| where Microsoft_Defender_Installed_s == \"{defenderInstalled}\"\n| extend Microsoft_Defender_Healthy_b=tobool(Microsoft_Defender_Healthy_s)\n| extend Microsoft_Defender_Health=case(Microsoft_Defender_Healthy_b, \"Healthy\", Microsoft_Defender_Health_Issues_s)\n| project\n    TimeGenerated,\n    Computer_Name=Computer_Name_s,\n    IP_Addresses=replace_string(IP_Address_s, \"\\\\n\", \", \"),\n    Microsoft_Defender_Installed=Microsoft_Defender_Installed_s,\n    Microsoft_Defender_Health,\n    AntiMalware_Product_Version=Microsoft_Defender_AntiMalware_Product_Version_s,\n    AntiMalware_Engine_Version=Microsoft_Defender_AntiMalware_Engine_Version_s,\n    AntiSpyware_Signature_Version=Microsoft_Defender_AntiSpyware_Signature_Version_s,\n    QuickScan_Signature_Version=Microsoft_Defender_QuickScan_Signature_Version_s",
+                    "size": 0,
+                    "title": "Microsoft Defender Agents by Install Status",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces"
+                  },
+                  "conditionalVisibility": {
+                    "parameterName": "defenderInstalled",
+                    "comparison": "isNotEqualTo",
+                    "value": ""
+                  },
+                  "name": "Agents by Installed",
+                  "styleSettings": {
+                    "margin": "15px",
+                    "padding": "50px",
+                    "showBorder": true
+                  }
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| extend // booleans\n    Microsoft_Defender_Installed_b=tobool(Microsoft_Defender_Installed_s),\n    Microsoft_Defender_Healthy_b=tobool(Microsoft_Defender_Healthy_s)\n| where Microsoft_Defender_Installed_b\n| extend Microsoft_Defender_Health=case(Microsoft_Defender_Healthy_b, \"Healthy\", Microsoft_Defender_Health_Issues_s)\n| where Microsoft_Defender_Health == \"{defenderHealthStatus}\"\n| project\n    TimeGenerated,\n    Computer_Name=Computer_Name_s,\n    IP_Addresses=replace_string(IP_Address_s, \"\\\\n\", \", \"),\n    Microsoft_Defender_Health,\n    AntiMalware_Product_Version=Microsoft_Defender_AntiMalware_Product_Version_s,\n    AntiMalware_Engine_Version=Microsoft_Defender_AntiMalware_Engine_Version_s,\n    AntiSpyware_Signature_Version=Microsoft_Defender_AntiSpyware_Signature_Version_s,\n    QuickScan_Signature_Version=Microsoft_Defender_QuickScan_Signature_Version_s",
+                    "size": 0,
+                    "title": "Microsoft Defender Agents by Health Status",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces"
+                  },
+                  "conditionalVisibility": {
+                    "parameterName": "defenderHealthStatus",
+                    "comparison": "isNotEqualTo",
+                    "value": ""
+                  },
+                  "name": "Agents by Health",
+                  "styleSettings": {
+                    "margin": "10px",
+                    "padding": "50px",
+                    "showBorder": true
+                  }
+                }
+              ]
+            },
+            "name": "Agent Health",
+            "styleSettings": {
+              "margin": "10px",
+              "padding": "10px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 12,
+            "content": {
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "title": "AntiMalware",
+              "items": [
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| extend\n    Microsoft_Defender_AntiMalware_Service_Enabled_b=tobool(Microsoft_Defender_AntiMalware_Service_Enabled_s)\n| where OS_Platform_s == \"Windows\"\n| summarize by Microsoft_Defender_AntiMalware_Service_Enabled_s, Computer_ID_s\n| summarize Count=count() by Microsoft_Defender_AntiMalware_Service_Enabled_s\n| render piechart",
+                    "size": 0,
+                    "title": "AntiMalware Service Enabled",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "exportedParameters": [
+                      {
+                        "fieldName": "series",
+                        "parameterName": "AntiMalware_Service_Enabled",
+                        "parameterType": 1
+                      },
+                      {
+                        "fieldName": "",
+                        "parameterName": "selection",
+                        "parameterType": 1
+                      }
+                    ],
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces",
+                    "chartSettings": {
+                      "seriesLabelSettings": [
+                        {
+                          "seriesName": "True",
+                          "color": "green"
+                        }
+                      ]
+                    }
+                  },
+                  "customWidth": "50",
+                  "name": "AntiMalware Service Enabled"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| extend\n    Microsoft_Defender_AntiMalware_Service_Enabled_b=tobool(Microsoft_Defender_AntiMalware_Service_Enabled_s)\n| where Microsoft_Defender_AntiMalware_Service_Enabled_b\n| summarize by Microsoft_Defender_AntiMalware_Service_State_s, Computer_ID_s\n| summarize Count=count() by Microsoft_Defender_AntiMalware_Service_State_s\n| render piechart",
+                    "size": 0,
+                    "title": "AntiMalware Service States",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "exportFieldName": "series",
+                    "exportParameterName": "AntiMalware_Service_State",
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces",
+                    "chartSettings": {
+                      "seriesLabelSettings": [
+                        {
+                          "seriesName": "Normal",
+                          "color": "green"
+                        }
+                      ]
+                    }
+                  },
+                  "customWidth": "50",
+                  "name": "AntiMalware Service States"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| where Microsoft_Defender_AntiMalware_Service_Enabled_s == \"{AntiMalware_Service_Enabled}\"\n| extend Microsoft_Defender_Healthy_b=tobool(Microsoft_Defender_Healthy_s)\n| extend Microsoft_Defender_Health=case(Microsoft_Defender_Healthy_b, \"Healthy\", Microsoft_Defender_Health_Issues_s)\n| project\n    TimeGenerated,\n    Computer_Name=Computer_Name_s,\n    IP_Addresses=replace_string(IP_Address_s, \"\\\\n\", \", \"),\n    AntiMalware_Service_Enabled=Microsoft_Defender_AntiMalware_Service_Enabled_s,\n    AntiMalware_Service_State=Microsoft_Defender_AntiMalware_Service_State_s,\n    Microsoft_Defender_Health,\n    AntiMalware_Product_Version=Microsoft_Defender_AntiMalware_Product_Version_s,\n    AntiMalware_Engine_Version=Microsoft_Defender_AntiMalware_Engine_Version_s,\n    AntiSpyware_Signature_Version=Microsoft_Defender_AntiSpyware_Signature_Version_s,\n    QuickScan_Signature_Version=Microsoft_Defender_QuickScan_Signature_Version_s",
+                    "size": 0,
+                    "title": "AntiMalware Service Enabled Query",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces"
+                  },
+                  "conditionalVisibility": {
+                    "parameterName": "AntiMalware_Service_Enabled",
+                    "comparison": "isNotEqualTo"
+                  },
+                  "name": "AntiMalware Service Enabled Query",
+                  "styleSettings": {
+                    "margin": "10px",
+                    "padding": "50px",
+                    "showBorder": true
+                  }
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| where Microsoft_Defender_AntiMalware_Service_State_s == \"{AntiMalware_Service_State}\"\n| extend Microsoft_Defender_Healthy_b=tobool(Microsoft_Defender_Healthy_s)\n| extend Microsoft_Defender_Health=case(Microsoft_Defender_Healthy_b, \"Healthy\", Microsoft_Defender_Health_Issues_s)\n| project\n    TimeGenerated,\n    Computer_Name=Computer_Name_s,\n    IP_Addresses=replace_string(IP_Address_s, \"\\\\n\", \", \"),\n    AntiMalware_Service_State=Microsoft_Defender_AntiMalware_Service_State_s,\n    Microsoft_Defender_Health,\n    AntiMalware_Product_Version=Microsoft_Defender_AntiMalware_Product_Version_s,\n    AntiMalware_Engine_Version=Microsoft_Defender_AntiMalware_Engine_Version_s,\n    AntiSpyware_Signature_Version=Microsoft_Defender_AntiSpyware_Signature_Version_s,\n    QuickScan_Signature_Version=Microsoft_Defender_QuickScan_Signature_Version_s",
+                    "size": 0,
+                    "title": "AntiMalware Service State Query",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces"
+                  },
+                  "conditionalVisibility": {
+                    "parameterName": "AntiMalware_Service_State",
+                    "comparison": "isNotEqualTo"
+                  },
+                  "name": "AntiMalware Service State Query",
+                  "styleSettings": {
+                    "margin": "10px",
+                    "padding": "50px",
+                    "showBorder": true
+                  }
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| extend\n    Microsoft_Defender_AntiMalware_Service_Enabled_b=tobool(Microsoft_Defender_AntiMalware_Service_Enabled_s)\n| where Microsoft_Defender_AntiMalware_Service_Enabled_b\n| summarize by Microsoft_Defender_AntiMalware_Engine_Version_s, Computer_ID_s\n| summarize Count=count() by Engine_Version=Microsoft_Defender_AntiMalware_Engine_Version_s\n| order by Engine_Version asc",
+                    "size": 4,
+                    "title": "AntiMalware Engine Versions",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "exportFieldName": "Engine_Version",
+                    "exportParameterName": "AntiMalware_Engine_Version",
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces",
+                    "sortBy": [],
+                    "tileSettings": {
+                      "titleContent": {
+                        "columnMatch": "AntiMalware_Engine_Version",
+                        "formatter": 1
+                      },
+                      "leftContent": {
+                        "columnMatch": "Count",
+                        "formatter": 12,
+                        "formatOptions": {
+                          "palette": "auto"
+                        }
+                      },
+                      "showBorder": false
+                    }
+                  },
+                  "customWidth": "50",
+                  "name": "AntiMalware Engine Versions"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| extend\n    Microsoft_Defender_AntiMalware_Service_Enabled_b=tobool(Microsoft_Defender_AntiMalware_Service_Enabled_s)\n| where Microsoft_Defender_AntiMalware_Service_Enabled_b\n| summarize by Microsoft_Defender_AntiMalware_Product_Version_s, Computer_ID_s\n| summarize Count=count() by Product_Version=Microsoft_Defender_AntiMalware_Product_Version_s\n| order by Product_Version asc",
+                    "size": 4,
+                    "title": "AntiMalware Product Versions",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "exportFieldName": "Product_Version",
+                    "exportParameterName": "AntiMalware_Product_Version",
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces",
+                    "visualization": "table",
+                    "gridSettings": {
+                      "sortBy": [
+                        {
+                          "itemKey": "Count",
+                          "sortOrder": 1
+                        }
+                      ]
+                    },
+                    "sortBy": [
+                      {
+                        "itemKey": "Count",
+                        "sortOrder": 1
+                      }
+                    ],
+                    "tileSettings": {
+                      "titleContent": {
+                        "columnMatch": "Microsoft_Defender_AntiMalware_Product_Version_s",
+                        "formatter": 1
+                      },
+                      "leftContent": {
+                        "columnMatch": "Count",
+                        "formatter": 12,
+                        "formatOptions": {
+                          "palette": "auto"
+                        }
+                      },
+                      "showBorder": false
+                    }
+                  },
+                  "customWidth": "50",
+                  "name": "AntiMalware Product Versions"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| where Microsoft_Defender_AntiMalware_Engine_Version_s == \"{AntiMalware_Engine_Version}\"\n| extend Microsoft_Defender_Healthy_b=tobool(Microsoft_Defender_Healthy_s)\n| extend Microsoft_Defender_Health=case(Microsoft_Defender_Healthy_b, \"Healthy\", Microsoft_Defender_Health_Issues_s)\n| project\n    TimeGenerated,\n    Computer_Name=Computer_Name_s,\n    IP_Addresses=replace_string(IP_Address_s, \"\\\\n\", \", \"),\n    AntiMalware_Service_State=Microsoft_Defender_AntiMalware_Service_State_s,\n    Microsoft_Defender_Health,\n    AntiMalware_Product_Version=Microsoft_Defender_AntiMalware_Product_Version_s,\n    AntiMalware_Engine_Version=Microsoft_Defender_AntiMalware_Engine_Version_s,\n    AntiSpyware_Signature_Version=Microsoft_Defender_AntiSpyware_Signature_Version_s,\n    QuickScan_Signature_Version=Microsoft_Defender_QuickScan_Signature_Version_s",
+                    "size": 0,
+                    "title": "AntiMalware Engine Version Query",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces"
+                  },
+                  "conditionalVisibility": {
+                    "parameterName": "AntiMalware_Engine_Version",
+                    "comparison": "isNotEqualTo"
+                  },
+                  "name": "AntiMalware Engine Version Query",
+                  "styleSettings": {
+                    "margin": "10px",
+                    "padding": "50px",
+                    "showBorder": true
+                  }
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| where Microsoft_Defender_AntiMalware_Product_Version_s == \"{AntiMalware_Product_Version}\"\n| extend Microsoft_Defender_Healthy_b=tobool(Microsoft_Defender_Healthy_s)\n| extend Microsoft_Defender_Health=case(Microsoft_Defender_Healthy_b, \"Healthy\", Microsoft_Defender_Health_Issues_s)\n| project\n    TimeGenerated,\n    Computer_Name=Computer_Name_s,\n    IP_Addresses=replace_string(IP_Address_s, \"\\\\n\", \", \"),\n    AntiMalware_Service_State=Microsoft_Defender_AntiMalware_Service_State_s,\n    Microsoft_Defender_Health,\n    AntiMalware_Product_Version=Microsoft_Defender_AntiMalware_Product_Version_s,\n    AntiMalware_Engine_Version=Microsoft_Defender_AntiMalware_Engine_Version_s,\n    AntiSpyware_Signature_Version=Microsoft_Defender_AntiSpyware_Signature_Version_s,\n    QuickScan_Signature_Version=Microsoft_Defender_QuickScan_Signature_Version_s",
+                    "size": 0,
+                    "title": "AntiMalware Product Version Query",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces"
+                  },
+                  "conditionalVisibility": {
+                    "parameterName": "AntiMalware_Product_Version",
+                    "comparison": "isNotEqualTo"
+                  },
+                  "name": "AntiMalware Product Version Query ",
+                  "styleSettings": {
+                    "margin": "10px",
+                    "padding": "50px",
+                    "showBorder": true
+                  }
+                }
+              ]
+            },
+            "name": "AntiMalware",
+            "styleSettings": {
+              "margin": "10px",
+              "padding": "10px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 12,
+            "content": {
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "title": "QuickScan",
+              "items": [
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| where not(Microsoft_Defender_QuickScan_Age_s contains \"N/A\")\n| extend\n    Microsoft_Defender_AntiMalware_Service_Enabled_b=tobool(Microsoft_Defender_AntiMalware_Service_Enabled_s),\n    Microsoft_Defender_QuickScan_Overdue_b=tobool(Microsoft_Defender_QuickScan_Overdue_s)\n| where Microsoft_Defender_AntiMalware_Service_Enabled_b\n| extend QuickScan_Status=case(Microsoft_Defender_QuickScan_Overdue_b, \"Overdue\", \"Current\")\n| summarize by QuickScan_Status, Computer_ID_s\n| summarize Count=count() by QuickScan_Status\n| render piechart",
+                    "size": 0,
+                    "title": "QuickScan Status",
+                    "noDataMessage": "No endpoints found with overdue QuickScans",
+                    "noDataMessageStyle": 3,
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "exportFieldName": "series",
+                    "exportParameterName": "QuickScan_Status",
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces",
+                    "chartSettings": {
+                      "seriesLabelSettings": [
+                        {
+                          "seriesName": "Current",
+                          "color": "green"
+                        },
+                        {
+                          "seriesName": "Overdue",
+                          "color": "red"
+                        }
+                      ]
+                    },
+                    "textSettings": {
+                      "style": "bignumber"
+                    }
+                  },
+                  "customWidth": "50",
+                  "name": "QuickScan Status",
+                  "styleSettings": {
+                    "margin": "10px",
+                    "padding": "10px"
+                  }
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| where Microsoft_Defender_QuickScan_Signature_Version_s != \"\"\n| summarize by Signature_Version=Microsoft_Defender_QuickScan_Signature_Version_s, Computer_ID_s\n| summarize Count=count() by Signature_Version\n| order by Signature_Version asc",
+                    "size": 0,
+                    "title": "QuickScan Signature Versions",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "exportFieldName": "Signature_Version",
+                    "exportParameterName": "QuickScan_Signature_Version",
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces",
+                    "visualization": "table",
+                    "tileSettings": {
+                      "showBorder": false,
+                      "titleContent": {
+                        "columnMatch": "Microsoft_Defender_QuickScan_Signature_Version_s",
+                        "formatter": 1
+                      },
+                      "leftContent": {
+                        "columnMatch": "Count",
+                        "formatter": 12,
+                        "formatOptions": {
+                          "palette": "auto"
+                        },
+                        "numberFormat": {
+                          "unit": 17,
+                          "options": {
+                            "maximumSignificantDigits": 3,
+                            "maximumFractionDigits": 2
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "customWidth": "50",
+                  "name": "QuickScan Signature Versions",
+                  "styleSettings": {
+                    "margin": "10px",
+                    "padding": "10px"
+                  }
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| where not(Microsoft_Defender_QuickScan_Age_s contains \"N/A\")\n| extend\n    Microsoft_Defender_Healthy_b=tobool(Microsoft_Defender_Healthy_s),\n    Microsoft_Defender_QuickScan_Overdue_b=tobool(Microsoft_Defender_QuickScan_Overdue_s),\n    Microsoft_Defender_QuickScan_Age_d=todouble(Microsoft_Defender_QuickScan_Age_s)\n| extend Microsoft_Defender_Health=case(Microsoft_Defender_Healthy_b, \"Healthy\", Microsoft_Defender_Health_Issues_s)\n| extend QuickScan_Status=case(Microsoft_Defender_QuickScan_Overdue_b, \"Overdue\", \"Current\")\n| extend QuickScan_Age=strcat(trim(\".0\", tostring(Microsoft_Defender_QuickScan_Age_d)), \" days\")\n| where QuickScan_Status == \"{QuickScan_Status}\"\n| project\n    TimeGenerated,\n    Computer_Name=Computer_Name_s,\n    IP_Addresses=replace_string(IP_Address_s, \"\\\\n\", \", \"),\n    QuickScan_Status,\n    QuickScan_Age,\n    QuickScan_Signature_Version=Microsoft_Defender_QuickScan_Signature_Version_s",
+                    "size": 0,
+                    "title": "QuickScan Status Query",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces"
+                  },
+                  "conditionalVisibility": {
+                    "parameterName": "QuickScan_Status",
+                    "comparison": "isNotEqualTo"
+                  },
+                  "name": "QuickScan Status Query",
+                  "styleSettings": {
+                    "margin": "10px",
+                    "padding": "50px",
+                    "showBorder": true
+                  }
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| where not(Microsoft_Defender_QuickScan_Age_s contains \"N/A\")\n| extend\n    Microsoft_Defender_Healthy_b=tobool(Microsoft_Defender_Healthy_s),\n    Microsoft_Defender_QuickScan_Overdue_b=tobool(Microsoft_Defender_QuickScan_Overdue_s),\n    Microsoft_Defender_QuickScan_Age_d=todouble(Microsoft_Defender_QuickScan_Age_s)\n| extend Microsoft_Defender_Health=case(Microsoft_Defender_Healthy_b, \"Healthy\", Microsoft_Defender_Health_Issues_s)\n| extend QuickScan_Status=case(Microsoft_Defender_QuickScan_Overdue_b, \"Overdue\", \"Current\")\n| extend QuickScan_Age=strcat(trim(\".0\", tostring(Microsoft_Defender_QuickScan_Age_d)), \" days\")\n| where Microsoft_Defender_QuickScan_Signature_Version_s == \"{QuickScan_Signature_Version}\"\n| project\n    TimeGenerated,\n    Computer_Name=Computer_Name_s,\n    IP_Addresses=replace_string(IP_Address_s, \"\\\\n\", \", \"),\n    QuickScan_Status,\n    QuickScan_Age,\n    QuickScan_Signature_Version=Microsoft_Defender_QuickScan_Signature_Version_s",
+                    "size": 0,
+                    "title": "QuickScan Signature Version Query",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "showExportToExcel": true,
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces"
+                  },
+                  "conditionalVisibility": {
+                    "parameterName": "QuickScan_Signature_Version",
+                    "comparison": "isNotEqualTo"
+                  },
+                  "name": "QuickScan Signature Version Query",
+                  "styleSettings": {
+                    "margin": "10px",
+                    "padding": "50px",
+                    "showBorder": true
+                  }
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| extend\n    Microsoft_Defender_QuickScan_Age_d=todouble(Microsoft_Defender_QuickScan_Age_s)\n| where Microsoft_Defender_QuickScan_Age_d != \"\"\n| summarize by Microsoft_Defender_QuickScan_Age_d, Computer_ID_s\n| summarize Count=count() by QuickScan_Age=strcat(trim_end(\".0\", tostring(Microsoft_Defender_QuickScan_Age_d)), \" days\")\n| order by QuickScan_Age asc\n| render barchart",
+                    "size": 2,
+                    "title": "QuickScan Ages",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "exportFieldName": "series",
+                    "exportParameterName": "QuickScan_Age",
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces"
+                  },
+                  "name": "QuickScan Ages",
+                  "styleSettings": {
+                    "margin": "10px",
+                    "padding": "10px"
+                  }
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| where not(Microsoft_Defender_QuickScan_Age_s contains \"N/A\")\n| extend\n    Microsoft_Defender_Healthy_b=tobool(Microsoft_Defender_Healthy_s),\n    Microsoft_Defender_QuickScan_Overdue_b=tobool(Microsoft_Defender_QuickScan_Overdue_s),\n    Microsoft_Defender_QuickScan_Age_d=todouble(Microsoft_Defender_QuickScan_Age_s)\n| extend Microsoft_Defender_Health=case(Microsoft_Defender_Healthy_b, \"Healthy\", Microsoft_Defender_Health_Issues_s)\n| extend QuickScan_Status=case(Microsoft_Defender_QuickScan_Overdue_b, \"Overdue\", \"Current\")\n| extend QuickScan_Age=strcat(trim_end(\".0\", tostring(Microsoft_Defender_QuickScan_Age_d)), \" days\")\n| where QuickScan_Age == \"{QuickScan_Age}\"\n| project\n    TimeGenerated,\n    Computer_Name=Computer_Name_s,\n    IP_Addresses=replace_string(IP_Address_s, \"\\\\n\", \", \"),\n    QuickScan_Status,\n    QuickScan_Age,\n    QuickScan_Signature_Version=Microsoft_Defender_QuickScan_Signature_Version_s",
+                    "size": 0,
+                    "title": "QuickScan Age Query",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces"
+                  },
+                  "conditionalVisibility": {
+                    "parameterName": "QuickScan_Age",
+                    "comparison": "isNotEqualTo"
+                  },
+                  "name": "QuickScan Age Query",
+                  "styleSettings": {
+                    "margin": "10px",
+                    "padding": "50px",
+                    "showBorder": true
+                  }
+                }
+              ]
+            },
+            "name": "QuickScan",
+            "styleSettings": {
+              "margin": "10px",
+              "padding": "10px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 12,
+            "content": {
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "title": "AntiSpyware",
+              "items": [
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| extend\n    Microsoft_Defender_Installed_b=tobool(Microsoft_Defender_Installed_s)\n| where Microsoft_Defender_Installed_b and OS_Platform_s == \"Windows\"\n| summarize by Microsoft_Defender_AntiSpyware_Service_Enabled_s, Computer_ID_s\n| summarize Count=count() by Microsoft_Defender_AntiSpyware_Service_Enabled_s\n| render piechart",
+                    "size": 0,
+                    "title": "AntiSpyware Service Enabled",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "exportFieldName": "series",
+                    "exportParameterName": "AntiSpyware_Service_State",
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces",
+                    "chartSettings": {
+                      "seriesLabelSettings": [
+                        {
+                          "seriesName": "True",
+                          "color": "green"
+                        }
+                      ]
+                    },
+                    "textSettings": {
+                      "style": "bignumber"
+                    }
+                  },
+                  "customWidth": "50",
+                  "name": "AntiSpyware Service Enabled",
+                  "styleSettings": {
+                    "margin": "10px",
+                    "padding": "10px"
+                  }
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| where Microsoft_Defender_AntiSpyware_Signature_Version_s != \"\"\n| summarize by Signature_Version=Microsoft_Defender_AntiSpyware_Signature_Version_s, Computer_ID_s\n| summarize Count=count() by Signature_Version\n| order by Signature_Version asc",
+                    "size": 0,
+                    "title": "AntiSpyware Signature Versions",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "exportFieldName": "Signature_Version",
+                    "exportParameterName": "AntiSpyware_Signature_Version",
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces",
+                    "gridSettings": {
+                      "sortBy": [
+                        {
+                          "itemKey": "Signature_Version",
+                          "sortOrder": 1
+                        }
+                      ]
+                    },
+                    "sortBy": [
+                      {
+                        "itemKey": "Signature_Version",
+                        "sortOrder": 1
+                      }
+                    ]
+                  },
+                  "customWidth": "50",
+                  "name": "AntiSpyware Signature Versions",
+                  "styleSettings": {
+                    "margin": "10px",
+                    "padding": "10px"
+                  }
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| where not(Microsoft_Defender_QuickScan_Age_s contains \"N/A\")\n| extend\n    Microsoft_Defender_Healthy_b=tobool(Microsoft_Defender_Healthy_s),\n    Microsoft_Defender_AntiSpyware_Signature_Age_Days_d=todouble(Microsoft_Defender_AntiSpyware_Signature_Days_Age_s)\n| extend Microsoft_Defender_Health=case(Microsoft_Defender_Healthy_b, \"Healthy\", Microsoft_Defender_Health_Issues_s)\n| extend AntiSpyware_Signature_Age=strcat(trim_end(\".0\", tostring(Microsoft_Defender_AntiSpyware_Signature_Age_Days_d)), \" days\")\n| where Microsoft_Defender_AntiSpyware_Service_Enabled_s == \"{AntiSpyware_Service_State}\"\n| project\n    TimeGenerated,\n    Computer_Name=Computer_Name_s,\n    IP_Addresses=replace_string(IP_Address_s, \"\\\\n\", \", \"),\n    AntiSpyware_Service_Enabled=Microsoft_Defender_AntiSpyware_Service_Enabled_s,\n    AntiSpyware_Signature_Age,\n    AntiSpyware_Signature_Version=Microsoft_Defender_AntiSpyware_Signature_Version_s",
+                    "size": 0,
+                    "title": "AntiSpyware Service Enabled Query",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces"
+                  },
+                  "conditionalVisibility": {
+                    "parameterName": "AntiSpyware_Service_State",
+                    "comparison": "isNotEqualTo"
+                  },
+                  "name": "AntiSpyware Service Enabled Query",
+                  "styleSettings": {
+                    "margin": "10px",
+                    "padding": "50px",
+                    "showBorder": true
+                  }
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| where not(Microsoft_Defender_QuickScan_Age_s contains \"N/A\")\n| extend\n    Microsoft_Defender_Healthy_b=tobool(Microsoft_Defender_Healthy_s),\n    Microsoft_Defender_AntiSpyware_Signature_Age_Days_d=todouble(Microsoft_Defender_AntiSpyware_Signature_Days_Age_s)\n| extend Microsoft_Defender_Health=case(Microsoft_Defender_Healthy_b, \"Healthy\", Microsoft_Defender_Health_Issues_s)\n| extend AntiSpyware_Signature_Age=strcat(trim_end(\".0\", tostring(Microsoft_Defender_AntiSpyware_Signature_Age_Days_d)), \" days\")\n| where Microsoft_Defender_AntiSpyware_Signature_Version_s == \"{AntiSpyware_Signature_Version}\"\n| project\n    TimeGenerated,\n    Computer_Name=Computer_Name_s,\n    IP_Addresses=replace_string(IP_Address_s, \"\\\\n\", \", \"),\n    AntiSpyware_Service_Enabled=Microsoft_Defender_AntiSpyware_Service_Enabled_s,\n    AntiSpyware_Signature_Age,\n    AntiSpyware_Signature_Version=Microsoft_Defender_AntiSpyware_Signature_Version_s",
+                    "size": 0,
+                    "title": "AntiSpyware Signature Version Query",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces"
+                  },
+                  "conditionalVisibility": {
+                    "parameterName": "AntiSpyware_Signature_Version",
+                    "comparison": "isNotEqualTo"
+                  },
+                  "name": "AntiSpyware Signature Version Query",
+                  "styleSettings": {
+                    "margin": "10px",
+                    "padding": "50px",
+                    "showBorder": true
+                  }
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| extend\n    Microsoft_Defender_AntiSpyware_Signature_Days_Age_d=todouble(Microsoft_Defender_AntiSpyware_Signature_Days_Age_s)\n| where Microsoft_Defender_AntiSpyware_Signature_Days_Age_d != \"\"\n| summarize by Microsoft_Defender_AntiSpyware_Signature_Days_Age_d, Computer_ID_s\n| summarize Count=count() by SignatureAge=strcat(trim_end(\".0\", tostring(Microsoft_Defender_AntiSpyware_Signature_Days_Age_d)), \" days\")\n| order by SignatureAge asc\n| render barchart",
+                    "size": 2,
+                    "title": "AntiSpyware Signature Ages",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "exportFieldName": "series",
+                    "exportParameterName": "AntiSpyware_Signature_Age",
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces",
+                    "gridSettings": {
+                      "formatters": [
+                        {
+                          "columnMatch": "Microsoft_Defender_AntiSpyware_Signature_Days_Age_d",
+                          "formatter": 1,
+                          "numberFormat": {
+                            "unit": 27,
+                            "options": {
+                              "style": "decimal"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "chartSettings": {
+                      "ySettings": {
+                        "numberFormatSettings": {
+                          "unit": 0,
+                          "options": {
+                            "style": "decimal",
+                            "useGrouping": true
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "name": "AntiSpyware Signature Age in Days",
+                  "styleSettings": {
+                    "margin": "10px",
+                    "padding": "10px"
+                  }
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "TaniumMicrosoftDefenderHealth_CL\n| where not(Microsoft_Defender_QuickScan_Age_s contains \"N/A\")\n| extend\n    Microsoft_Defender_Healthy_b=tobool(Microsoft_Defender_Healthy_s),\n    Microsoft_Defender_AntiSpyware_Signature_Age_Days_d=todouble(Microsoft_Defender_AntiSpyware_Signature_Days_Age_s)\n| extend Microsoft_Defender_Health=case(Microsoft_Defender_Healthy_b, \"Healthy\", Microsoft_Defender_Health_Issues_s)\n| extend AntiSpyware_Signature_Age=strcat(trim_end(\".0\", tostring(Microsoft_Defender_AntiSpyware_Signature_Age_Days_d)), \" days\")\n| where AntiSpyware_Signature_Age == \"{AntiSpyware_Signature_Age}\"\n| project\n    TimeGenerated,\n    Computer_Name=Computer_Name_s,\n    IP_Addresses=replace_string(IP_Address_s, \"\\\\n\", \", \"),\n    AntiSpyware_Service_Enabled=Microsoft_Defender_AntiSpyware_Service_Enabled_s,\n    AntiSpyware_Signature_Age,\n    AntiSpyware_Signature_Version=Microsoft_Defender_AntiSpyware_Signature_Version_s",
+                    "size": 0,
+                    "title": "AntiSpyware Signature Age Query",
+                    "timeContext": {
+                      "durationMs": 86400000
+                    },
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces"
+                  },
+                  "conditionalVisibility": {
+                    "parameterName": "AntiSpyware_Signature_Age",
+                    "comparison": "isNotEqualTo"
+                  },
+                  "name": "AntiSpyware Signature Age Query",
+                  "styleSettings": {
+                    "margin": "10px",
+                    "padding": "50px",
+                    "showBorder": true
+                  }
+                }
+              ]
+            },
+            "name": "AntiSpyware",
+            "styleSettings": {
+              "margin": "10px",
+              "padding": "10px",
+              "showBorder": true
+            }
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Microsoft Defender Health"
+      },
+      "name": "Microsoft Defender (last 24 hours)"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "title": "Microsoft Agents (last 30 days)",
+        "items": [
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let tbin=1d;\nTaniumMicrosoftDefenderHealth_CL\n| extend\n    Microsoft_Defender_Installed_b=tobool(Microsoft_Defender_Installed_s),\n    Microsoft_Defender_Healthy_b=tobool(Microsoft_Defender_Healthy_s)\n| where Microsoft_Defender_Installed_b\n| extend Microsoft_Defender_Health=case(Microsoft_Defender_Healthy_b, \"Healthy\", Microsoft_Defender_Health_Issues_s)\n| summarize by bin(TimeGenerated, tbin), Microsoft_Defender_Healthy_b, Microsoft_Defender_Health, Computer_ID_s\n| summarize Count = count() by format_datetime(bin(TimeGenerated, tbin), 'yyyy-MM-dd'), Microsoft_Defender_Health\n| order by TimeGenerated asc\n| render barchart",
+              "size": 2,
+              "aggregation": 5,
+              "title": "Microsoft Defender Health by Date",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "exportFieldName": "series",
+              "exportParameterName": "defender_health_by_date",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "tileSettings": {
+                "showBorder": false,
+                "titleContent": {
+                  "columnMatch": "Microsoft_Defender_Health",
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "Count",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "auto"
+                  },
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "maximumSignificantDigits": 3,
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                }
+              },
+              "graphSettings": {
+                "type": 0,
+                "topContent": {
+                  "columnMatch": "Microsoft_Defender_Health",
+                  "formatter": 1
+                },
+                "centerContent": {
+                  "columnMatch": "Count",
+                  "formatter": 1,
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "maximumSignificantDigits": 3,
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                }
+              },
+              "chartSettings": {
+                "xAxis": "TimeGenerated",
+                "group": "Microsoft_Defender_Health",
+                "createOtherGroup": null,
+                "showLegend": true
+              }
+            },
+            "customWidth": "50",
+            "name": "Microsoft Defender Health by Date",
+            "styleSettings": {
+              "margin": "10px",
+              "padding": "10px"
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let tbin=1d;\nTaniumMicrosoftDefenderHealth_CL\n| extend\n    Microsoft_Defender_Installed_b=tobool(Microsoft_Defender_Installed_s)\n| where Microsoft_Defender_Installed_b == true and OS_Platform_s == \"Windows\"\n| summarize by bin(TimeGenerated, tbin), Microsoft_Defender_AntiMalware_Engine_Version_s, Computer_ID_s\n| summarize Count = count() by format_datetime(bin(TimeGenerated, tbin), 'yyyy-MM-dd'), Microsoft_Defender_AntiMalware_Engine_Version_s\n| order by TimeGenerated asc\n| render barchart",
+              "size": 2,
+              "aggregation": 5,
+              "title": "AntiMalware Engine Versions by Date",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "exportFieldName": "series",
+              "exportParameterName": "defender_antimalware_engine_version_by_date",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "tileSettings": {
+                "titleContent": {
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "AntiMalware_Engine_Versions",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "blue"
+                  }
+                },
+                "showBorder": false
+              },
+              "graphSettings": {
+                "type": 0,
+                "topContent": {
+                  "columnMatch": "TimeGenerated",
+                  "formatter": 1
+                },
+                "centerContent": {
+                  "columnMatch": "Count",
+                  "formatter": 1,
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "maximumSignificantDigits": 3,
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                }
+              },
+              "chartSettings": {
+                "xAxis": "TimeGenerated",
+                "group": "Microsoft_Defender_AntiMalware_Engine_Version_s",
+                "createOtherGroup": null,
+                "showLegend": true
+              },
+              "textSettings": {
+                "style": "bignumber"
+              }
+            },
+            "customWidth": "50",
+            "name": "AntiMalware Engine Versions by Date",
+            "styleSettings": {
+              "margin": "10px",
+              "padding": "10px"
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let tbin=1d;\nTaniumMicrosoftDefenderHealth_CL\n| extend\n    Microsoft_Defender_Installed_b=tobool(Microsoft_Defender_Installed_s),\n    Microsoft_Defender_Healthy_b=tobool(Microsoft_Defender_Healthy_s)\n| where Microsoft_Defender_Installed_b\n| extend Microsoft_Defender_Health=case(Microsoft_Defender_Healthy_b, \"Healthy\", Microsoft_Defender_Health_Issues_s)\n| where Microsoft_Defender_Health == \"{defender_health_by_date}\"\n| summarize by bin(TimeGenerated, tbin), Microsoft_Defender_Healthy_b, Microsoft_Defender_Health, Computer_Name_s, Computer_ID_s\n| summarize Count = count() by format_datetime(bin(TimeGenerated, tbin), 'yyyy-MM-dd'), Microsoft_Defender_Health, Computer_Name=Computer_Name_s\n| order by TimeGenerated asc",
+              "size": 0,
+              "title": "Microsoft Defender Health Query",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces"
+            },
+            "conditionalVisibility": {
+              "parameterName": "defender_health_by_date",
+              "comparison": "isNotEqualTo"
+            },
+            "name": "Microsoft Defender Health Query",
+            "styleSettings": {
+              "margin": "15px",
+              "padding": "50px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let tbin=1d;\nTaniumMicrosoftDefenderHealth_CL\n| extend\n    Microsoft_Defender_Installed_b=tobool(Microsoft_Defender_Installed_s)\n| where Microsoft_Defender_Installed_b == true and OS_Platform_s == \"Windows\"\n| where Microsoft_Defender_AntiMalware_Engine_Version_s == \"{defender_antimalware_engine_version_by_date}\"\n| summarize by bin(TimeGenerated, tbin), Microsoft_Defender_AntiMalware_Engine_Version_s, Computer_ID_s, Computer_Name_s\n| summarize Count = count() by format_datetime(bin(TimeGenerated, tbin), 'yyyy-MM-dd'), Microsoft_Defender_AntiMalware_Engine_Version_s, Computer_Name=Computer_Name_s\n| order by TimeGenerated asc",
+              "size": 0,
+              "title": "Microsoft Defender Antimalware Engine Version Query",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces"
+            },
+            "conditionalVisibility": {
+              "parameterName": "defender_antimalware_engine_version_by_date",
+              "comparison": "isNotEqualTo"
+            },
+            "name": "Microsoft Defender Antimalware Engine Version Query",
+            "styleSettings": {
+              "margin": "15px",
+              "padding": "50px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let tbin=1d;\nTaniumMicrosoftDefenderHealth_CL\n| extend\n    Microsoft_Defender_Installed_b=tobool(Microsoft_Defender_Installed_s)\n| where Microsoft_Defender_Installed_b == true and OS_Platform_s == \"Windows\"\n| summarize by bin(TimeGenerated, tbin), Microsoft_Defender_AntiMalware_Product_Version_s, Computer_ID_s\n| summarize AntiMalware_Product_Version_Count = count() by format_datetime(bin(TimeGenerated, tbin), 'yyyy-MM-dd'), Microsoft_Defender_AntiMalware_Product_Version_s\n| order by TimeGenerated asc\n| render barchart",
+              "size": 2,
+              "aggregation": 5,
+              "title": "AntiMalware Product Versions by Date",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "exportFieldName": "series",
+              "exportParameterName": "defender_antimalware_product_version_by_date",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "tileSettings": {
+                "titleContent": {
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "AntiMalware_Engine_Versions",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "blue"
+                  }
+                },
+                "showBorder": false
+              },
+              "chartSettings": {
+                "xAxis": "TimeGenerated",
+                "group": "Microsoft_Defender_AntiMalware_Product_Version_s",
+                "createOtherGroup": null,
+                "showLegend": true
+              },
+              "textSettings": {
+                "style": "bignumber"
+              }
+            },
+            "customWidth": "50",
+            "name": "AntiMalware Product Versions by Date",
+            "styleSettings": {
+              "margin": "10px",
+              "padding": "10px"
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let tbin=1d;\nTaniumMicrosoftDefenderHealth_CL\n| extend\n    Microsoft_Defender_Installed_b=tobool(Microsoft_Defender_Installed_s)\n| where Microsoft_Defender_Installed_b == true and OS_Platform_s == \"Windows\"\n| summarize by bin(TimeGenerated, tbin), Microsoft_Defender_QuickScan_Signature_Version_s, Computer_ID_s\n| summarize AntiMalware_QuickScan_Signature_Version_Count = count() by format_datetime(bin(TimeGenerated, tbin), 'yyyy-MM-dd'), Microsoft_Defender_QuickScan_Signature_Version_s\n| order by TimeGenerated asc\n| render barchart",
+              "size": 2,
+              "aggregation": 5,
+              "title": "QuickScan Signature Versions by Date",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "exportFieldName": "series",
+              "exportParameterName": "defender_quickscan_signature_version_by_date",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "tileSettings": {
+                "titleContent": {
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "AntiMalware_Engine_Versions",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "blue"
+                  }
+                },
+                "showBorder": false
+              },
+              "chartSettings": {
+                "xAxis": "TimeGenerated",
+                "group": "Microsoft_Defender_QuickScan_Signature_Version_s",
+                "createOtherGroup": null,
+                "showLegend": true
+              },
+              "textSettings": {
+                "style": "bignumber"
+              }
+            },
+            "customWidth": "50",
+            "name": "QuickScan Signature Versions by Date",
+            "styleSettings": {
+              "margin": "10px",
+              "padding": "10px"
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let tbin=1d;\nTaniumMicrosoftDefenderHealth_CL\n| extend\n    Microsoft_Defender_Installed_b=tobool(Microsoft_Defender_Installed_s)\n| where Microsoft_Defender_Installed_b == true and OS_Platform_s == \"Windows\"\n| where Microsoft_Defender_AntiMalware_Product_Version_s == \"{defender_antimalware_product_version_by_date}\"\n| summarize by bin(TimeGenerated, tbin), Microsoft_Defender_AntiMalware_Product_Version_s, Computer_ID_s, Computer_Name_s\n| summarize AntiMalware_Product_Version_Count = count() by format_datetime(bin(TimeGenerated, tbin), 'yyyy-MM-dd'), Microsoft_Defender_AntiMalware_Product_Version_s, Computer_Name_s\n| order by TimeGenerated asc",
+              "size": 0,
+              "title": "Microsoft Defender Antimalware Product Version Query",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces"
+            },
+            "conditionalVisibility": {
+              "parameterName": "defender_antimalware_product_version_by_date",
+              "comparison": "isNotEqualTo"
+            },
+            "name": "Microsoft Defender Antimalware Product Version Query",
+            "styleSettings": {
+              "margin": "15px",
+              "padding": "50px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let tbin=1d;\nlet signature_version=iff(\"{defender_quickscan_signature_version_by_date}\" == \"<empty>\", \"\", \"{defender_quickscan_signature_version_by_date}\");\nTaniumMicrosoftDefenderHealth_CL\n| extend\n    Microsoft_Defender_Installed_b=tobool(Microsoft_Defender_Installed_s)\n| where Microsoft_Defender_Installed_b == true and OS_Platform_s == \"Windows\"\n| where Microsoft_Defender_QuickScan_Signature_Version_s == signature_version\n| summarize by bin(TimeGenerated, tbin), Microsoft_Defender_QuickScan_Signature_Version_s, Computer_ID_s, Computer_Name_s\n| summarize AntiMalware_QuickScan_Signature_Version_Count = count() by format_datetime(bin(TimeGenerated, tbin), 'yyyy-MM-dd'), Microsoft_Defender_QuickScan_Signature_Version_s, Computer_Name=Computer_Name_s\n| order by TimeGenerated asc",
+              "size": 0,
+              "title": "Microsoft Defender QuickScan Signature Version Query",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces"
+            },
+            "conditionalVisibility": {
+              "parameterName": "defender_quickscan_signature_version_by_date",
+              "comparison": "isNotEqualTo"
+            },
+            "name": "Microsoft Defender QuickScan Signature Version Query",
+            "styleSettings": {
+              "margin": "15px",
+              "padding": "50px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let tbin=1d;\nTaniumMicrosoftDefenderHealth_CL\n| extend\n    Microsoft_Defender_Installed_b=tobool(Microsoft_Defender_Installed_s)\n| where Microsoft_Defender_Installed_b == true and OS_Platform_s == \"Windows\"\n| summarize by bin(TimeGenerated, tbin), Microsoft_Defender_AntiSpyware_Signature_Version_s, Computer_ID_s\n| summarize AntiMalware_AntiSpyware_Signature_Version_Count = count() by format_datetime(bin(TimeGenerated, tbin), 'yyyy-MM-dd'), Microsoft_Defender_AntiSpyware_Signature_Version_s\n| order by TimeGenerated asc\n| render barchart",
+              "size": 2,
+              "aggregation": 5,
+              "title": "AntiSpyware Signature Versions by Date",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "exportFieldName": "series",
+              "exportParameterName": "defender_antispyware_signature_version_by_date",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "tileSettings": {
+                "titleContent": {
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "AntiMalware_Engine_Versions",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "blue"
+                  }
+                },
+                "showBorder": false
+              },
+              "graphSettings": {
+                "type": 0,
+                "topContent": {
+                  "columnMatch": "TimeGenerated",
+                  "formatter": 1
+                },
+                "centerContent": {
+                  "columnMatch": "AntiMalware_AntiSpyware_Signature_Version_Count",
+                  "formatter": 1,
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "maximumSignificantDigits": 3,
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                }
+              },
+              "chartSettings": {
+                "xAxis": "TimeGenerated",
+                "yAxis": [
+                  "AntiMalware_AntiSpyware_Signature_Version_Count"
+                ],
+                "group": "Microsoft_Defender_AntiSpyware_Signature_Version_s",
+                "createOtherGroup": null,
+                "showLegend": true
+              },
+              "textSettings": {
+                "style": "bignumber"
+              }
+            },
+            "customWidth": "50",
+            "name": "AntiSpyware Signature Versions by Date",
+            "styleSettings": {
+              "margin": "10px",
+              "padding": "10px"
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "let tbin=1d;\nTaniumMicrosoftDefenderHealth_CL\n| extend\n    Microsoft_Defender_Installed_b=tobool(Microsoft_Defender_Installed_s)\n| where Microsoft_Defender_Installed_b == true and OS_Platform_s == \"Windows\"\n| where Microsoft_Defender_AntiSpyware_Signature_Version_s == \"{defender_antispyware_signature_version_by_date}\"\n| summarize by bin(TimeGenerated, tbin), Microsoft_Defender_AntiSpyware_Signature_Version_s, Computer_ID_s, Computer_Name_s\n| summarize AntiMalware_AntiSpyware_Signature_Version_Count = count() by format_datetime(bin(TimeGenerated, tbin), 'yyyy-MM-dd'), Microsoft_Defender_AntiSpyware_Signature_Version_s, Computer_Name=Computer_Name_s\n| order by TimeGenerated asc",
+              "size": 0,
+              "title": "Microsoft Defender AntiSpyware Signature Version Query",
+              "timeContext": {
+                "durationMs": 2592000000
+              },
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces"
+            },
+            "conditionalVisibility": {
+              "parameterName": "defender_antispyware_signature_version_by_date",
+              "comparison": "isNotEqualTo"
+            },
+            "name": "Microsoft Defender AntiSpyware Signature Version Query",
+            "styleSettings": {
+              "margin": "15px",
+              "padding": "50px",
+              "showBorder": true
+            }
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Microsoft Defender Health"
+      },
+      "name": "Microsoft Defender (last 30 days)",
+      "styleSettings": {
+        "showBorder": true
+      }
     }
   ],
   "fallbackResourceIds": [],
