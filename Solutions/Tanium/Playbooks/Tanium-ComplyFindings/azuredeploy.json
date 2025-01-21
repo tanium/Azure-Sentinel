@@ -26,7 +26,10 @@
     "parameters": {
         "PlaybookName": {
             "defaultValue": "Tanium-ComplyFindings",
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                "description": "The name to use for the playbook. (This will exist as an Azure Logic app in your subscription)"
+            }
         },
         "IntegrationAccountName": {
             "defaultValue": "",
