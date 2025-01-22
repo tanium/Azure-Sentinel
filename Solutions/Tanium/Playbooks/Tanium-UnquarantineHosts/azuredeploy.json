@@ -31,6 +31,13 @@
                 "description": "The name to use for the playbook. (This will exist as an Azure Logic app in your subscription)"
             }
         },
+        "AzureSentinelConnectionName": {
+            "defaultValue": "Tanium-UnquarantineHosts-Sentinel-WebConn",
+            "type": "string",
+            "metadata": {
+                "description": "The name to use for the Sentinel Connector in the Logic App . (This will exist as an API Connection in your subscription)"
+            }
+        },
         "IntegrationAccountName": {
             "defaultValue": "",
             "type": "string",
@@ -60,7 +67,6 @@
         }
     },
     "variables": {
-        "AzureSentinelConnectionName": "[concat('azuresentinel-', parameters('PlaybookName'))]",
         "TaniumActionsApi": "[uri(concat('https://', parameters('TaniumServerHostname')), '/api/v2/actions')]",
         "TaniumAllComputersUrl": "[uri(concat('https://', parameters('TaniumServerHostname')), '/api/v2/groups/by-name/All%20Computers')]",
         "TaniumPackagesByNameUrlFragment": "[uri(concat('https://', parameters('TaniumServerHostname')), '/api/v2/packages/by-name/')]",
@@ -71,11 +77,11 @@
         {
           "type": "Microsoft.Web/connections",
           "apiVersion": "2016-06-01",
-          "name": "[variables('AzureSentinelConnectionName')]",
+          "name": "[parameters('AzureSentinelConnectionName')]",
           "location": "[resourceGroup().location]",
           "kind": "V1",
           "properties": {
-              "displayName": "[variables('AzureSentinelConnectionName')]",
+              "displayName": "[parameters('AzureSentinelConnectionName')]",
               "customParameterValues": {},
               "api": {
                   "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]"
@@ -92,7 +98,7 @@
                 "type": "SystemAssigned"
             },
             "dependsOn": [
-              "[resourceId('Microsoft.Web/connections', variables('AzureSentinelConnectionName'))]"
+              "[resourceId('Microsoft.Web/connections', parameters('AzureSentinelConnectionName'))]"
             ],
             "properties": {
                 "state": "Enabled",
@@ -2475,8 +2481,8 @@
                     "$connections": {
                         "value": {
                             "azuresentinel": {
-                                "connectionName": "[variables('AzureSentinelConnectionName')]",
-                                "connectionId": "[resourceId('Microsoft.Web/connections', variables('AzureSentinelConnectionName'))]",
+                                "connectionName": "[parameters('AzureSentinelConnectionName')]",
+                                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('AzureSentinelConnectionName'))]",
                                 "id": "[concat('/subscriptions/',subscription().subscriptionId, '/providers/Microsoft.Web/locations/',resourceGroup().location,'/managedApis/azuresentinel')]",
                                 "connectionProperties": {
                                     "authentication": {
