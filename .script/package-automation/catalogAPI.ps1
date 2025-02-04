@@ -173,7 +173,8 @@ function GetPackageVersion($defaultPackageVersion, $offerId, $offerDetails, $pac
                 else 
                 {
                     $identifiedOfferVersion = $offerMetadataVersion
-                    $catalogMajor,$catalogminor,$catalogbuild,$catalogrevision = $identifiedOfferVersion.split(".")
+                    $identifiedOfferVersion = "3.0.0"
+                    $catalogMajor,$catalogminor,$catalogbuild,$catalogrevision = $identifiedOfferVersion.split(".")                   
                     $defaultMajor,$defaultminor,$defaultbuild,$defaultrevision = $defaultPackageVersion.split(".")
 
                     if ($defaultMajor -gt $catalogMajor)
@@ -185,6 +186,7 @@ function GetPackageVersion($defaultPackageVersion, $offerId, $offerDetails, $pac
                     else 
                     {
                         $packageVersion = GetIncrementedVersion $identifiedOfferVersion
+                        Write-Host "Haha hahaha using $($packageVersion)"
                         return $packageVersion
                     }
                 }
