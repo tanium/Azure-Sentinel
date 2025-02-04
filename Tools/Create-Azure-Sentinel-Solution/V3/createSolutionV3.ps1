@@ -131,7 +131,7 @@ try {
         if ($packageVersion -ne $contentToImport.version) {
             $contentToImport.PSObject.Properties.Remove('version')
             $contentToImport | Add-Member -MemberType NoteProperty -Name 'version' -Value $packageVersion 
-            Write-Host "Package version updated to $packageVersion"
+            Write-Host "Package version updated to $packageVersion" yo yo
         }
 
         $TemplateSpecAttribute = [bool]($contentToImport.PSobject.Properties.Name -match "TemplateSpec")
