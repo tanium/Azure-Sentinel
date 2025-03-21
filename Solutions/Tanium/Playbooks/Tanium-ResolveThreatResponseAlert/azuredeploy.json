@@ -28,7 +28,7 @@
             "defaultValue": "Tanium-ResolveThreatResponseAlert",
             "type": "string",
             "metadata": {
-                    "description": "The name to use for the playbook. (This will exist as an Azure Logic app in your subscription)"
+                "description": "The name to use for the playbook. (This will exist as an Azure Logic app in your subscription)"
             }
         },
         "AzureSentinelConnectionName": {
@@ -78,7 +78,7 @@
             "kind": "V1",
             "properties": {
                 "displayName": "[parameters('AzureSentinelConnectionName')]",
-                "customParameterValues": { },
+                "customParameterValues": {},
                 "api": {
                     "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]"
                 },
@@ -106,7 +106,7 @@
                     "contentVersion": "1.0.0.0",
                     "parameters": {
                         "$connections": {
-                            "defaultValue": { },
+                            "defaultValue": {},
                             "type": "Object"
                         },
                         "TaniumApiGatewayApi": {
@@ -139,7 +139,7 @@
                         "Check_API_Gateway_response": {
                             "actions": {
                                 "Comment_success": {
-                                    "runAfter": { },
+                                    "runAfter": {},
                                     "type": "ApiConnection",
                                     "inputs": {
                                         "body": {
@@ -164,7 +164,7 @@
                             "else": {
                                 "actions": {
                                     "Comment_failure": {
-                                        "runAfter": { },
+                                        "runAfter": {},
                                         "type": "ApiConnection",
                                         "inputs": {
                                             "body": {
@@ -195,7 +195,7 @@
                             "type": "If"
                         },
                         "Extract_Threat_Response_Alert_GUID": {
-                            "runAfter": { },
+                            "runAfter": {},
                             "type": "JavaScriptCode",
                             "inputs": {
                                 "code": "var sentinel = workflowContext.trigger.outputs.body;\r\n\r\nreturn JSON.parse(sentinel.object.properties.relatedEntities.find(function(e) {\r\n\treturn e.kind === 'Url';\r\n}).properties.url.replace(/\\\\/g, '')).alert_guid;"
@@ -258,9 +258,23 @@
                                 "method": "POST",
                                 "uri": "@parameters('TaniumApiGatewayApi')"
                             }
+                        },
+                        "Get_Hosts_From_Incident": {
+                            "runAfter": {},
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": "@triggerBody()?['object']?['properties']?['relatedEntities']",
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/entities/host"
+                            }
                         }
                     },
-                    "outputs": { }
+                    "outputs": {}
                 },
                 "parameters": {
                     "$connections": {
