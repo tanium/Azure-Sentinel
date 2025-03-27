@@ -121,7 +121,7 @@
                         }
                     },
                     "triggers": {
-                        "Microsoft_Sentinel_incident": {
+                        "Microsoft_Sentinel_Incident": {
                             "type": "ApiConnectionWebhook",
                             "inputs": {
                                 "body": {
@@ -338,7 +338,7 @@
                                 ]
                             }
                         },
-                        "Initialize_Endpoint_Filter": {
+                        "Initialize_Endpoint_Filter": { 
                             "runAfter": {
                                 "Exit_early_if_incident_has_no_hosts": [
                                     "Succeeded"
@@ -703,7 +703,7 @@
                         },
                         "Get_General_Host_Info": {
                             "runAfter": {
-                                "Initialize_API_Query": [
+                                 "Initialize_API_Query": [
                                     "Succeeded"
                                 ],
                                 "Initialize_API_Variables": [
@@ -800,7 +800,7 @@
                             "runAfter": {
                                 "Initialize_API_Response": [
                                     "Succeeded"
-                                ]
+                                ]                               
                             },
                             "expression": {
                                 "and": [
