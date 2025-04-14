@@ -22,7 +22,8 @@
         },
         "author": {
             "name": "Tanium"
-        }
+        },
+        "templateVersion": "2.1.0"
     },
     "parameters": {
         "PlaybookName": {
