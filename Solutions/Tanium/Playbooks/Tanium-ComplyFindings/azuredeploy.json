@@ -1,6 +1,6 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "2.0.0.0",
+    "contentVersion": "2.1.0.0",
     "metadata": {
         "title": "Tanium-ComplyFindings",
         "description": "Tanium's real-time data can speed up investigations by providing important context for analysts, such as whether or not their are compliance findings on the endpoints in question.\nThis playbook starts with a Microsoft Sentinel incident, gets the hosts associated with that incident, queries the Tanium API Gateway for Comply Findings for those hosts, and then adds a comment to the incident with that information.",
@@ -22,7 +22,7 @@
         "author": {
             "name": "Tanium"
         },
-        "parameterTemplateVersion": "2.0.1"
+        "parameterTemplateVersion": "3.0.0"
     },
     "parameters": {
         "PlaybookName": {
