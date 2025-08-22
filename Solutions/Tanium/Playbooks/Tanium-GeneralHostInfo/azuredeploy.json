@@ -59,17 +59,10 @@
             "metadata": {
                 "description": "The resource group name for the existing Azure Integration Account"
             }
-        },       
-        "TaniumServerHostname": {
-            "defaultValue": "<customerName>-api.cloud.tanium.com",
-            "type": "String",
-            "metadata": {
-                "description": "The hostname for your Tanium server's API. For cloud customers use <customerName>-api.cloud.tanium.com. For on-prem use the hostname of your server."
-            }
         }
     },
     "variables": {
-        "TaniumApiGatewayApi": "[uri(concat('https://',parameters('TaniumServerHostname')),'/plugin/products/gateway/graphql')]"
+        "TaniumApiGatewayPath": "/plugin/products/gateway/graphql"
     },
     "resources": [
         {
@@ -94,14 +87,14 @@
             "location": "[resourceGroup().location]",
             "kind": "V1",
             "properties": {
-                "displayName": "[parameters('KeyVaultConnectionName')]",                
+                "displayName": "[parameters('KeyVaultConnectionName')]",
                 "customParameterValues": {},
-                "api": {                    
+                "api": {
                     "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/keyvault')]"
                 },
                 "parameterValueType": "Alternative",
-                "alternativeParameterValues": {  
-                    "vaultName": "[parameters('KeyVaultName')]"  
+                "alternativeParameterValues": {
+                    "vaultName": "[parameters('KeyVaultName')]"
                 }
             }
         },
@@ -133,7 +126,7 @@
                             "defaultValue": {},
                             "type": "Object"
                         },
-                        "TaniumApiGatewayApi": {
+                        "TaniumApiGatewayPath": {
                             "type": "String"
                         }
                     },
@@ -502,10 +495,10 @@
                                                         },
                                                         "headers": {
                                                             "Content-Type": "application/json",
-                                                            "session": "@{body('Get_secret')?['value']}"
+                                                            "session": "@{body('Get_API_Token')?['value']}"
                                                         },
                                                         "method": "POST",
-                                                        "uri": "@parameters('TaniumApiGatewayApi')"
+                                                        "uri": "@uri(concat('https://', body('Get_Server_Host')?['value'], parameters('TaniumApiGatewayPath')))"
                                                     },
                                                     "runtimeConfiguration": {
                                                         "secureData": {
@@ -716,13 +709,16 @@
                                         },
                                         "headers": {
                                             "Content-Type": "application/json",
-                                            "session": "@{body('Get_secret')?['value']}"
+                                            "session": "@{body('Get_API_Token')?['value']}"
                                         },
                                         "method": "POST",
-                                        "uri": "@parameters('TaniumApiGatewayApi')"
+                                        "uri": "@uri(concat('https://', body('Get_Server_Host')?['value'], parameters('TaniumApiGatewayPath')))"
                                     },
                                     "runAfter": {
-                                        "Get_secret": [
+                                        "Get_API_Token": [
+                                            "SUCCEEDED"
+                                        ],
+                                        "Get_Server_Host": [
                                             "SUCCEEDED"
                                         ]
                                     },
@@ -750,10 +746,10 @@
                                                 },
                                                 "headers": {
                                                     "Content-Type": "application/json",
-                                                    "session": "@{body('Get_secret')?['value']}"
+                                                    "session": "@{body('Get_API_Token')?['value']}"
                                                 },
                                                 "method": "POST",
-                                                "uri": "@parameters('TaniumApiGatewayApi')"
+                                                "uri": "@uri(concat('https://', body('Get_Server_Host')?['value'], parameters('TaniumApiGatewayPath')))"
                                             },
                                             "runtimeConfiguration": {
                                                 "secureData": {
@@ -856,7 +852,7 @@
                                         ]
                                     }
                                 },
-                                "Get_secret": {
+                                "Get_API_Token": {
                                     "type": "ApiConnection",
                                     "inputs": {
                                         "host": {
@@ -866,6 +862,26 @@
                                         },
                                         "method": "get",
                                         "path": "/secrets/@{encodeURIComponent('TaniumApiToken')}/value"
+                                    },
+                                    "runtimeConfiguration": {
+                                        "secureData": {
+                                            "properties": [
+                                                "inputs",
+                                                "outputs"
+                                            ]
+                                        }
+                                    }
+                                },
+                                "Get_Server_Host": {
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['keyvault-1']['connectionId']"
+                                            }
+                                        },
+                                        "method": "get",
+                                        "path": "/secrets/@{encodeURIComponent('TaniumServerHostname')}/value"
                                     },
                                     "runtimeConfiguration": {
                                         "secureData": {
@@ -936,8 +952,8 @@
                             }
                         }
                     },
-                    "TaniumApiGatewayApi": {
-                        "value": "[variables('TaniumApiGatewayApi')]"
+                    "TaniumApiGatewayPath": {
+                        "value": "[variables('TaniumApiGatewayPath')]"
                     }
                 }
             }
