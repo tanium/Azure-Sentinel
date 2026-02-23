@@ -5,7 +5,7 @@
 
 This PlayBook / Logic App automatically create an alert when a successful login is performed from a suspicious or malicious IP.
 
-![Example Alert](/img/alert.png)
+![Example Alert](Images/alert.png)
 
 ## Prerequisites
 
@@ -22,7 +22,7 @@ Before deploying this playbook, ensure the following prerequisites are completed
 
 2. Fill in the required parameters.
 
-![Deploy](/img/setup.png)
+![Deploy](Images/setup.png)
 
 # Post Deployment Instructions
 
@@ -41,11 +41,11 @@ Our **Logic App** will exploit CrowdSec's CTI to create an **Alert** if the auth
 
 1. Create Analytics Rule
 
-![Analytics Rule Creation](/img/analytics-rule.png)
+![Analytics Rule Creation](Images/analytics-rule.png)
 
 2. Create Automation Rule
 
-![Automation Rule Creation](/img/automation-rule.png)
+![Automation Rule Creation](Images/automation-rule.png)
 
 3. Test it
 
