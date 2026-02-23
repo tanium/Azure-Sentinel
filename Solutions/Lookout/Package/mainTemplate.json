@@ -2801,7 +2801,7 @@
           "resources": [
             {
               "name": "[variables('parserObject1')._parserName1]",
-              "apiVersion": "2022-10-01",
+              "apiVersion": "2025-02-01",
               "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
               "location": "[parameters('workspace-location')]",
               "properties": {
@@ -2864,7 +2864,7 @@
     },
     {
       "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "2022-10-01",
+      "apiVersion": "2025-02-01",
       "name": "[variables('parserObject1')._parserName1]",
       "location": "[parameters('workspace-location')]",
       "properties": {
@@ -2929,7 +2929,7 @@
           "resources": [
             {
               "type": "Microsoft.OperationalInsights/savedSearches",
-              "apiVersion": "2022-10-01",
+              "apiVersion": "2025-02-01",
               "name": "Lookout_Hunting_Query_1",
               "location": "[parameters('workspace-location')]",
               "properties": {
