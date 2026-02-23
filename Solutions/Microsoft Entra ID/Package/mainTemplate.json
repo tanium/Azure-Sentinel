@@ -12576,7 +12576,7 @@
                               "accountEnabled": false
                             },
                             "method": "PATCH",
-                            "uri": "https://graph.microsoft.com/v1.0/users/@{concat(items('For_each')?['Name'], '@', items('for_each')?['UPNSuffix']))}"
+                            "uri": "https://graph.microsoft.com/v1.0/users/@{concat(items('For_each')?['Name'], '@', items('for_each')?['UPNSuffix'])}"
                           }
                         }
                       },
