@@ -1,0 +1,349 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "triggers": {
+            "Microsoft_Sentinel_alert": {
+                "type": "ApiConnectionWebhook",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                        }
+                    },
+                    "body": {
+                        "callback_url": "@{listCallbackUrl()}"
+                    },
+                    "path": "/subscribe"
+                },
+                "conditions": []
+            }
+        },
+        "actions": {
+            "Entities_-_Get_IPs": {
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                        }
+                    },
+                    "method": "post",
+                    "body": "@triggerBody()?['Entities']",
+                    "path": "/entities/ip"
+                },
+                "runAfter": {
+                    "Entities_-_Get_Accounts": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "For_each_IPs": {
+                "type": "Foreach",
+                "foreach": "@body('Entities_-_Get_IPs')?['IPs']",
+                "actions": {
+                    "HTTP": {
+                        "type": "Http",
+                        "inputs": {
+                            "uri": "https://cti.api.crowdsec.net/v2/smoke/@{items('For_each_IPs')?['Address']}",
+                            "method": "GET",
+                            "headers": {
+                                "x-api-key": "@{parameters('CrowdSec API Key')}"
+                            }
+                        },
+                        "runtimeConfiguration": {
+                            "contentTransfer": {
+                                "transferMode": "Chunked"
+                            }
+                        }
+                    },
+                    "HTTP_Request_successful": {
+                        "type": "If",
+                        "expression": {
+                            "and": [
+                                {
+                                    "equals": [
+                                        "@outputs('HTTP')?['statusCode']",
+                                        200
+                                    ]
+                                }
+                            ]
+                        },
+                        "actions": {
+                            "Parse_JSON": {
+                                "type": "ParseJson",
+                                "inputs": {
+                                    "content": "@body('HTTP')",
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "ip": {
+                                                "type": "string"
+                                            },
+                                            "reputation": {
+                                                "type": "string"
+                                            },
+                                            "classifications": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "classifications": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "name": {
+                                                                    "type": "string"
+                                                                },
+                                                                "label": {
+                                                                    "type": "string"
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "additionalProperties": true
+                                    }
+                                }
+                            },
+                            "JSON_Is_valid": {
+                                "type": "If",
+                                "expression": {
+                                    "or": [
+                                        {
+                                            "equals": [
+                                                "@body('Parse_JSON')?['reputation']",
+                                                "malicious"
+                                            ]
+                                        },
+                                        {
+                                            "equals": [
+                                                "@body('Parse_JSON')?['reputation']",
+                                                "suspicious"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                "actions": {
+                                    "For_each_users": {
+                                        "type": "Foreach",
+                                        "foreach": "@body('Entities_-_Get_Accounts')?['Accounts']",
+                                        "actions": {
+                                            "Create_incident": {
+                                                "type": "ApiConnection",
+                                                "inputs": {
+                                                    "host": {
+                                                        "connection": {
+                                                            "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                                                        }
+                                                    },
+                                                    "method": "put",
+                                                    "body": {
+                                                        "title": "Suspicious Login For @{items('For_each_users')?['Name']} From @{body('Parse_JSON')?['ip']}",
+                                                        "severity": "Medium",
+                                                        "status": "New",
+                                                        "description": "Suspicious IP, reason: @{join(variables('classifications'), ',')}"
+                                                    },
+                                                    "path": "/Incidents/subscriptions/@{encodeURIComponent(variables('subscription'))}/resourceGroups/@{encodeURIComponent(variables('resourceGroupName'))}/workspaces/@{encodeURIComponent(parameters('Workspace Name'))}"
+                                                }
+                                            },
+                                            "Add_alert_to_incident": {
+                                                "type": "ApiConnection",
+                                                "inputs": {
+                                                    "host": {
+                                                        "connection": {
+                                                            "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                                                        }
+                                                    },
+                                                    "method": "post",
+                                                    "body": {
+                                                        "incidentArmId": "@body('Create_incident')?['id']",
+                                                        "relatedResourceId": "@triggerBody()?['SystemAlertId']"
+                                                    },
+                                                    "path": "/Incidents/Relation/Create"
+                                                },
+                                                "runAfter": {
+                                                    "Add_CTI_link_to_incident_as_comment": [
+                                                        "Succeeded"
+                                                    ]
+                                                }
+                                            },
+                                            "Add_CTI_link_to_incident_as_comment": {
+                                                "type": "ApiConnection",
+                                                "inputs": {
+                                                    "host": {
+                                                        "connection": {
+                                                            "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                                                        }
+                                                    },
+                                                    "method": "post",
+                                                    "body": {
+                                                        "incidentArmId": "@body('Create_incident')?['id']",
+                                                        "message": "<p class=\"editor-paragraph\">Crowdsec CTI URL: https://app.crowdsec.net/cti/@{body('Parse_JSON')?['ip']}</p>"
+                                                    },
+                                                    "path": "/Incidents/Comment"
+                                                },
+                                                "runAfter": {
+                                                    "Create_incident": [
+                                                        "Succeeded"
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "For_each_classification_in_classifications": [
+                                                "Succeeded"
+                                            ]
+                                        }
+                                    },
+                                    "For_each_classification_in_classifications": {
+                                        "type": "Foreach",
+                                        "foreach": "@body('Parse_JSON')?['classifications']?['classifications']",
+                                        "actions": {
+                                            "Append_to_array_variable": {
+                                                "type": "AppendToArrayVariable",
+                                                "inputs": {
+                                                    "name": "classifications",
+                                                    "value": "@item()?['label']"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "Set_variable": {
+                                        "type": "SetVariable",
+                                        "inputs": {
+                                            "name": "classifications",
+                                            "value": []
+                                        },
+                                        "runAfter": {
+                                            "For_each_users": [
+                                                "Succeeded"
+                                            ]
+                                        }
+                                    }
+                                },
+                                "else": {
+                                    "actions": {}
+                                },
+                                "runAfter": {
+                                    "Parse_JSON": [
+                                        "Succeeded"
+                                    ]
+                                }
+                            }
+                        },
+                        "else": {
+                            "actions": {}
+                        },
+                        "runAfter": {
+                            "HTTP": [
+                                "Succeeded",
+                                "Failed",
+                                "TimedOut"
+                            ]
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Entities_-_Get_IPs": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Entities_-_Get_Accounts": {
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                        }
+                    },
+                    "method": "post",
+                    "body": "@triggerBody()?['Entities']",
+                    "path": "/entities/account"
+                },
+                "runAfter": {
+                    "Delay": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Initialize_variables": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "classifications",
+                            "type": "array"
+                        },
+                        {
+                            "name": "subscription",
+                            "type": "string",
+                            "value": "@{last(split(subscription().id, '/'))}"
+                        },
+                        {
+                            "name": "resourceGroupName",
+                            "type": "string",
+                            "value": "@{resourceGroup().name}"
+                        }
+                    ]
+                },
+                "runAfter": {}
+            },
+            "Delay": {
+                "type": "Wait",
+                "inputs": {
+                    "interval": {
+                        "count": 120,
+                        "unit": "Second"
+                    }
+                },
+                "runAfter": {
+                    "Initialize_variables": [
+                        "Succeeded"
+                    ]
+                }
+            }
+        },
+        "outputs": {},
+        "parameters": {
+            "CrowdSec API Key": {
+                "defaultValue": "",
+                "type": "SecureString"
+            },
+            "Workspace Name": {
+                "defaultValue": "",
+                "type": "String",
+                "metadata": {
+                    "description": "Log Analytics Workspace Name"
+                }
+            },
+            "Playbook Name": {
+                "defaultValue": "\"",
+                "type": "String"
+            },
+            "$connections": {
+                "type": "Object",
+                "defaultValue": {}
+            }
+        }
+    },
+    "parameters": {
+        "$connections": {
+            "type": "Object",
+            "value": {
+                "azuresentinel": {
+                    "id": "/subscriptions/@{subscription().subscriptionId}/providers/Microsoft.Web/locations/francecentral/managedApis/azuresentinel",
+                    "connectionId": "/subscriptions/<SUBSCRIPTION_ID>/resourceGroups/sentinel-test/providers/Microsoft.Web/connections/azuresentinel-test-playbook",
+                    "connectionName": "azuresentinel-test-playbook",
+                    "connectionProperties": {
+                        "authentication": {
+                            "type": "ManagedServiceIdentity"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
