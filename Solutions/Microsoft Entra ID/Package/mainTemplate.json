@@ -10671,11 +10671,8 @@
                   "groupingConfiguration": {
                     "lookbackDuration": "PT5H",
                     "enabled": false,
-                    "groupByAlertDetails": [],
                     "matchingMethod": "AllEntities",
-                    "groupByCustomDetails": [],
-                    "reopenClosedIncident": false,
-                    "groupByEntities": []
+                    "reopenClosedIncident": false
                   }
                 }
               }
@@ -10797,11 +10794,8 @@
                   "groupingConfiguration": {
                     "lookbackDuration": "PT1H",
                     "enabled": false,
-                    "groupByAlertDetails": [],
                     "matchingMethod": "AllEntities",
-                    "groupByCustomDetails": [],
-                    "reopenClosedIncident": false,
-                    "groupByEntities": []
+                    "reopenClosedIncident": false
                   }
                 }
               }
@@ -10920,11 +10914,8 @@
                   "groupingConfiguration": {
                     "lookbackDuration": "PT1H",
                     "enabled": false,
-                    "groupByAlertDetails": [],
                     "matchingMethod": "AllEntities",
-                    "groupByCustomDetails": [],
-                    "reopenClosedIncident": false,
-                    "groupByEntities": []
+                    "reopenClosedIncident": false
                   }
                 }
               }
@@ -11046,11 +11037,8 @@
                   "groupingConfiguration": {
                     "lookbackDuration": "PT1H",
                     "enabled": false,
-                    "groupByAlertDetails": [],
                     "matchingMethod": "AllEntities",
-                    "groupByCustomDetails": [],
-                    "reopenClosedIncident": false,
-                    "groupByEntities": []
+                    "reopenClosedIncident": false
                   }
                 }
               }
@@ -11172,11 +11160,8 @@
                   "groupingConfiguration": {
                     "lookbackDuration": "PT1H",
                     "enabled": false,
-                    "groupByAlertDetails": [],
                     "matchingMethod": "AllEntities",
-                    "groupByCustomDetails": [],
-                    "reopenClosedIncident": false,
-                    "groupByEntities": []
+                    "reopenClosedIncident": false
                   }
                 }
               }
@@ -11298,11 +11283,8 @@
                   "groupingConfiguration": {
                     "lookbackDuration": "PT5M",
                     "enabled": false,
-                    "groupByAlertDetails": [],
                     "matchingMethod": "AllEntities",
-                    "groupByCustomDetails": [],
-                    "reopenClosedIncident": false,
-                    "groupByEntities": []
+                    "reopenClosedIncident": false
                   }
                 }
               }
@@ -11421,11 +11403,8 @@
                   "groupingConfiguration": {
                     "lookbackDuration": "PT1H",
                     "enabled": false,
-                    "groupByAlertDetails": [],
                     "matchingMethod": "AllEntities",
-                    "groupByCustomDetails": [],
-                    "reopenClosedIncident": false,
-                    "groupByEntities": []
+                    "reopenClosedIncident": false
                   }
                 }
               }
@@ -11547,11 +11526,8 @@
                   "groupingConfiguration": {
                     "lookbackDuration": "PT1H",
                     "enabled": false,
-                    "groupByAlertDetails": [],
                     "matchingMethod": "AllEntities",
-                    "groupByCustomDetails": [],
-                    "reopenClosedIncident": false,
-                    "groupByEntities": []
+                    "reopenClosedIncident": false
                   }
                 }
               }
@@ -11673,11 +11649,8 @@
                   "groupingConfiguration": {
                     "lookbackDuration": "PT1H",
                     "enabled": false,
-                    "groupByAlertDetails": [],
                     "matchingMethod": "AllEntities",
-                    "groupByCustomDetails": [],
-                    "reopenClosedIncident": false,
-                    "groupByEntities": []
+                    "reopenClosedIncident": false
                   }
                 }
               }
@@ -11796,11 +11769,8 @@
                   "groupingConfiguration": {
                     "lookbackDuration": "PT5H",
                     "enabled": false,
-                    "groupByAlertDetails": [],
                     "matchingMethod": "AllEntities",
-                    "groupByCustomDetails": [],
-                    "reopenClosedIncident": false,
-                    "groupByEntities": []
+                    "reopenClosedIncident": false
                   }
                 }
               }
