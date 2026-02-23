@@ -10,7 +10,7 @@ This PlayBook / Logic App automatically create an alert when a successful login 
 ## Prerequisites
 
 Before deploying this playbook, ensure the following prerequisites are completed:
-   1. Create a CTI API Key on https://app.crowdsec.net/
+   1. Create a CTI API Key on https://app.crowdsec.net/ according to [our documentation](https://docs.crowdsec.net/u/cti_api/api_getting_started/)
    2. Note down the following required value from the console
       - CrowdSec CTI API Key
 
