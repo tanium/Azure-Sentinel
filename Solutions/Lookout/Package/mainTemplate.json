@@ -1587,6 +1587,12 @@
                 "requiredDataConnectors": [
                   {
                     "dataTypes": [
+                      "LookoutMtdV2_CL"
+                    ],
+                    "connectorId": "LookoutStreaming_Definition"
+                  },
+                  {
+                    "dataTypes": [
                       "Lookout_CL"
                     ],
                     "connectorId": "LookoutAPI"
@@ -1701,6 +1707,12 @@
                 "triggerThreshold": 0,
                 "status": "Available",
                 "requiredDataConnectors": [
+                  {
+                    "dataTypes": [
+                      "LookoutMtdV2_CL"
+                    ],
+                    "connectorId": "LookoutStreaming_Definition"
+                  },
                   {
                     "dataTypes": [
                       "LookoutEvents"
@@ -1888,6 +1900,12 @@
                 "requiredDataConnectors": [
                   {
                     "dataTypes": [
+                      "LookoutMtdV2_CL"
+                    ],
+                    "connectorId": "LookoutStreaming_Definition"
+                  },
+                  {
+                    "dataTypes": [
                       "LookoutEvents"
                     ],
                     "connectorId": "LookoutAPI"
@@ -2051,6 +2069,12 @@
                 "triggerThreshold": 0,
                 "status": "Available",
                 "requiredDataConnectors": [
+                  {
+                    "dataTypes": [
+                      "LookoutMtdV2_CL"
+                    ],
+                    "connectorId": "LookoutStreaming_Definition"
+                  },
                   {
                     "dataTypes": [
                       "LookoutEvents"
@@ -2230,6 +2254,12 @@
                 "triggerThreshold": 0,
                 "status": "Available",
                 "requiredDataConnectors": [
+                  {
+                    "dataTypes": [
+                      "LookoutMtdV2_CL"
+                    ],
+                    "connectorId": "LookoutStreaming_Definition"
+                  },
                   {
                     "dataTypes": [
                       "LookoutEvents"
