@@ -6,11 +6,13 @@
     "config": {
       "isWizard": false,
       "basics": {
-        "description": "<img src=\"https://raw.githubusercontent.com/Azure/Azure-Sentinel/master/Logos/databahn.svg\" width=\"75px\" height=\"75px\">\n\n**Note:** Please refer to the following before installing the solution:\n\n• Review the solution [Release Notes](https://github.com/Azure/Azure-Sentinel/tree/master/Solutions/DataBahn/ReleaseNotes.md)\n\n• There may be [known issues](https://aka.ms/sentinelsolutionsknownissues) pertaining to this Solution.\n\nThe [DataBahn](https://databahn.ai/) push connector enables real-time event-driven ingestion of audit logs, operational alerts, and device inventory from your DataBahn platform into Microsoft Sentinel.\n\n**Data Connectors:** 1\n\n[Learn more about Microsoft Sentinel](https://aka.ms/azuresentinel) | [Learn more about Solutions](https://aka.ms/azuresentinelsolutionsdoc)",
+        "description": "<img src=\"https://raw.githubusercontent.com/Azure/Azure-Sentinel/master/Logos/databahn.svg\" width=\"75px\" height=\"75px\">\n\n**Note:** Please refer to the following before installing the solution: \n\n• Review the solution [Release Notes](https://github.com/Azure/Azure-Sentinel/tree/master/Solutions/DataBahn/ReleaseNotes.md)\n\n • There may be [known issues](https://aka.ms/sentinelsolutionsknownissues) pertaining to this Solution, please refer to them before installing.\n\nThe DataBahn connector provides the capability to push real-time platform telemetry from your DataBahn environment directly into Microsoft Sentinel using the Codeless Connector Framework (CCF) Push pattern. This connector ingests audit logs, operational alerts, and device inventory into custom Log Analytics tables for analysis, alerting, and visualization.\n\n**Data Connectors:** 1\n\n[Learn more about Microsoft Sentinel](https://aka.ms/azuresentinel) | [Learn more about Solutions](https://aka.ms/azuresentinelsolutionsdoc)",
         "subscription": {
           "resourceProviders": [
-            "Microsoft.OperationalInsights/workspaces",
-            "Microsoft.SecurityInsights/dataConnectorDefinitions"
+            "Microsoft.OperationsManagement/solutions",
+            "Microsoft.OperationalInsights/workspaces/providers/alertRules",
+            "Microsoft.Insights/workbooks",
+            "Microsoft.Logic/workflows"
           ]
         },
         "location": {
@@ -48,12 +50,36 @@
         "visible": true
       }
     ],
-    "steps": [],
+    "steps": [
+      {
+        "name": "dataconnectors",
+        "label": "Data Connectors",
+        "bladeTitle": "Data Connectors",
+        "elements": [
+          {
+            "name": "dataconnectors1-text",
+            "type": "Microsoft.Common.TextBlock",
+            "options": {
+              "text": "This Solution installs the data connector for DataBahn. You can get DataBahn data in your Microsoft Sentinel workspace. After installing the solution, configure and enable this data connector by following guidance in Manage solution view."
+            }
+          },
+          {
+            "name": "dataconnectors-link1",
+            "type": "Microsoft.Common.TextBlock",
+            "options": {
+              "link": {
+                "label": "Learn more about connecting data sources",
+                "uri": "https://docs.microsoft.com/azure/sentinel/connect-data-sources"
+              }
+            }
+          }
+        ]
+      }
+    ],
     "outputs": {
-      "workspace-location": "[first(map(filter(basics('getLAWorkspace').value, (filter) => filter.name == basics('workspace')), (item) => item.location))]",
+      "workspace-location": "[first(map(filter(basics('getLAWorkspace').value, (filter) => and(contains(toLower(filter.id), toLower(resourceGroup().name)),equals(filter.name,basics('workspace')))), (item) => item.location))]",
       "location": "[location()]",
       "workspace": "[basics('workspace')]"
     }
   }
 }
-

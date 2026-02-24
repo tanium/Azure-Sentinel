@@ -7,7 +7,7 @@
     "Data Connectors/DataBahn_PUSH_CCP/DataBahn_connectorDefinition.json"
   ],
   "BasePath": "",
-  "Version": "1.0.0",
+  "Version": "3.0.0",
   "Metadata": "SolutionMetadata.json",
   "TemplateSpec": true,
   "Is1PConnector": false
