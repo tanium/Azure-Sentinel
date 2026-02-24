@@ -85,32 +85,35 @@ For a detailed walkthrough of how to publish your solutions, please refer to the
 
 ### Certification FAQs:
 
-#### What Search keyword must be present for Sentinel solutions? 
-The Search keyword must contain the Sentinel GUID: **f1de974b-f438-4719-b423-8bf704ba2aef**. 
++ #### What Search keyword must be present for Sentinel solutions? 
+&emsp;&emsp;&emsp; The Search keyword must contain the Sentinel GUID: **f1de974b-f438-4719-b423-8bf704ba2aef**. 
 
-#### Is the text 'Azure Sentinel' allowed in offers or packages? 
-No. The text 'Azure Sentinel' must not appear anywhere. The correct branding is 'Microsoft Sentinel'. 
++ #### Is the text 'Azure Sentinel' allowed in offers or packages? 
+&emsp;&emsp;&emsp; No. The text 'Azure Sentinel' must not appear anywhere. The correct branding is 'Microsoft Sentinel'. 
 
-#### Should package name and package version match? 
-Yes. Package name and package version must be the same. For instance if package version is 3.0.1 then the package name should be 3.0.1.zip.
++ #### Should package name and package version match? 
+&emsp;&emsp;&emsp; Yes. Package name and package version mentioned in Partner Center must be the same. For instance if package version is 3.0.1 then the package name should be 3.0.1.zip.
 
-#### Where should the version number match? 
-The version number must match across Partner Center, Solution Metadata, and mainTemplate.json. 
++ #### Where should the version number match? 
+&emsp;&emsp;&emsp; The version number must match across Partner Center, Solution Metadata, and mainTemplate.json. 
 
-#### Is ARM-TTK validation required? 
-Yes. ARM-TTK must pass successfully. Any failures should result in rejection with details. 
++ #### Is ARM-TTK validation required? 
+&emsp;&emsp;&emsp; Yes. ARM-TTK must pass successfully. Any failures should result in rejection with details. 
 
-#### What image and logo checks are required? 
-Ensure images load correctly and logos referenced to master branch, not PR links. 
++ #### What image and logo checks are required? 
+&emsp;&emsp;&emsp; Ensure images load correctly and logos referenced to master branch, not PR links or private branch links. 
 
-#### Should DARSy zip content match GitHub repository content? 
-Yes. The package submitted to certification must exactly match GitHub master repository files. 
++ #### Should DARSy zip content match GitHub repository content? 
+&emsp;&emsp;&emsp; Yes. The package submitted to certification must exactly match GitHub master repository files. To ensure this, the Pull Request must be approved and merged prior to publishing the offer.
 
-#### Why should short-links be verified? 
-All links, especially short-links, must resolve correctly. Broken links are grounds for rejection. 
++ #### Why should short-links be verified? 
+&emsp;&emsp;&emsp; All links, especially short-links, must resolve correctly. Broken links are grounds for rejection. 
 
-#### Are release notes mandatory? 
-Yes. Release notes must be present and properly added. Missing release notes will cause rejection. 
++ #### Are release notes mandatory? 
+&emsp;&emsp;&emsp; Yes. Release notes must be present and properly added. Missing release notes will cause rejection. 
+
++ #### Are support information mandatory?
+&emsp;&emsp;&emsp; Yes. Support information including name, email, tier and link is mandatory.
 
 
 ## Feedback
