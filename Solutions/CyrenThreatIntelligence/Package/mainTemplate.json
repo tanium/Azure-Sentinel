@@ -55,11 +55,11 @@
     "email": "support@data443.com",
     "_email": "[variables('email')]",
     "_solutionName": "CyrenThreatIntelligence",
-    "_solutionVersion": "3.0.3",
+    "_solutionVersion": "3.0.4",
     "solutionId": "data443riskmitigationinc1761580347231.azure-sentinel-solution-cyren-threat-intel",
     "_solutionId": "[variables('solutionId')]",
     "workspaceResourceId": "[resourceId('microsoft.OperationalInsights/Workspaces', parameters('workspace'))]",
-    "dataConnectorCCPVersion": "3.0.3",
+    "dataConnectorCCPVersion": "1.0.0",
     "_dataConnectorContentIdConnectorDefinition1": "CyrenThreatIntel",
     "dataConnectorTemplateNameConnectorDefinition1": "[concat(parameters('workspace'),'-dc-',uniquestring(variables('_dataConnectorContentIdConnectorDefinition1')))]",
     "_dataConnectorContentIdConnections1": "CyrenThreatIntelConnections",
@@ -647,12 +647,12 @@
               "type": "object"
             },
             "cyrenIpReputationToken": {
-              "defaultValue": "cyrenIpReputationToken",
+              "defaultValue": "",
               "type": "securestring",
               "minLength": 1
             },
             "cyrenMalwareUrlToken": {
-              "defaultValue": "cyrenMalwareUrlToken",
+              "defaultValue": "",
               "type": "securestring",
               "minLength": 1
             }
@@ -807,7 +807,7 @@
         "[extensionResourceId(resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspace')), 'Microsoft.SecurityInsights/contentPackages', variables('_solutionId'))]"
       ],
       "properties": {
-        "description": "Cyren - High Risk IP Indicators_AnalyticalRules Analytics Rule with template version 3.0.3",
+        "description": "Cyren - High Risk IP Indicators_AnalyticalRules Analytics Rule with template version 3.0.1",
         "mainTemplate": {
           "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
           "contentVersion": "[variables('analyticRuleObject1').analyticRuleVersion1]",
@@ -851,35 +851,35 @@
                 ],
                 "entityMappings": [
                   {
-                    "entityType": "IP",
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "IPAddress"
+                        "columnName": "IPAddress",
+                        "identifier": "Address"
                       }
-                    ]
+                    ],
+                    "entityType": "IP"
                   }
                 ],
                 "eventGroupingSettings": {
                   "aggregationKind": "AlertPerResult"
                 },
                 "customDetails": {
-                  "DetectionCount": "DetectionCount",
-                  "RiskScore": "MaxRisk",
+                  "Source": "Source",
                   "Categories": "ThreatCategories",
-                  "Source": "Source"
+                  "DetectionCount": "DetectionCount",
+                  "RiskScore": "MaxRisk"
                 },
                 "incidentConfiguration": {
+                  "createIncident": true,
                   "groupingConfiguration": {
+                    "lookbackDuration": "1d",
+                    "enabled": true,
+                    "matchingMethod": "Selected",
                     "groupByEntities": [
                       "IP"
                     ],
-                    "lookbackDuration": "1d",
-                    "enabled": true,
-                    "reopenClosedIncident": false,
-                    "matchingMethod": "Selected"
-                  },
-                  "createIncident": true
+                    "reopenClosedIncident": false
+                  }
                 }
               }
             },
@@ -934,7 +934,7 @@
         "[extensionResourceId(resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspace')), 'Microsoft.SecurityInsights/contentPackages', variables('_solutionId'))]"
       ],
       "properties": {
-        "description": "Cyren - High Risk URL Indicators_AnalyticalRules Analytics Rule with template version 3.0.3",
+        "description": "Cyren - High Risk URL Indicators_AnalyticalRules Analytics Rule with template version 3.0.1",
         "mainTemplate": {
           "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
           "contentVersion": "[variables('analyticRuleObject2').analyticRuleVersion2]",
@@ -978,36 +978,36 @@
                 ],
                 "entityMappings": [
                   {
-                    "entityType": "URL",
                     "fieldMappings": [
                       {
-                        "identifier": "Url",
-                        "columnName": "MaliciousURL"
+                        "columnName": "MaliciousURL",
+                        "identifier": "Url"
                       }
-                    ]
+                    ],
+                    "entityType": "URL"
                   }
                 ],
                 "eventGroupingSettings": {
                   "aggregationKind": "AlertPerResult"
                 },
                 "customDetails": {
-                  "DetectionCount": "DetectionCount",
-                  "RiskScore": "MaxRisk",
+                  "Source": "Source",
                   "Categories": "ThreatCategories",
                   "Domain": "Domain",
-                  "Source": "Source"
+                  "DetectionCount": "DetectionCount",
+                  "RiskScore": "MaxRisk"
                 },
                 "incidentConfiguration": {
+                  "createIncident": true,
                   "groupingConfiguration": {
+                    "lookbackDuration": "1d",
+                    "enabled": true,
+                    "matchingMethod": "Selected",
                     "groupByEntities": [
                       "URL"
                     ],
-                    "lookbackDuration": "1d",
-                    "enabled": true,
-                    "reopenClosedIncident": false,
-                    "matchingMethod": "Selected"
-                  },
-                  "createIncident": true
+                    "reopenClosedIncident": false
+                  }
                 }
               }
             },
@@ -1062,7 +1062,7 @@
         "[extensionResourceId(resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspace')), 'Microsoft.SecurityInsights/contentPackages', variables('_solutionId'))]"
       ],
       "properties": {
-        "description": "Cyren - Feed Outage Detection_AnalyticalRules Analytics Rule with template version 3.0.3",
+        "description": "Cyren - Feed Outage Detection_AnalyticalRules Analytics Rule with template version 3.0.1",
         "mainTemplate": {
           "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
           "contentVersion": "[variables('analyticRuleObject3').analyticRuleVersion3]",
@@ -1106,18 +1106,18 @@
                   "aggregationKind": "SingleAlert"
                 },
                 "customDetails": {
-                  "LatestEventTime": "LatestEventTime",
                   "HoursSinceLastEvent": "HoursSinceLastEvent",
-                  "TotalEventsLast24h": "TotalEventsLast24h"
+                  "TotalEventsLast24h": "TotalEventsLast24h",
+                  "LatestEventTime": "LatestEventTime"
                 },
                 "incidentConfiguration": {
+                  "createIncident": true,
                   "groupingConfiguration": {
                     "lookbackDuration": "1d",
                     "enabled": false,
-                    "reopenClosedIncident": false,
-                    "matchingMethod": "Selected"
-                  },
-                  "createIncident": true
+                    "matchingMethod": "Selected",
+                    "reopenClosedIncident": false
+                  }
                 }
               }
             },
@@ -1172,7 +1172,7 @@
         "[extensionResourceId(resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspace')), 'Microsoft.SecurityInsights/contentPackages', variables('_solutionId'))]"
       ],
       "properties": {
-        "description": "CyrenThreatIntelligenceDashboard Workbook with template version 3.0.3",
+        "description": "CyrenThreatIntelligenceDashboard Workbook with template version 3.0.1",
         "mainTemplate": {
           "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
           "contentVersion": "[variables('workbookVersion1')]",
@@ -1190,7 +1190,7 @@
               },
               "properties": {
                 "displayName": "[parameters('workbook1-name')]",
-                "serializedData": "{\"version\":\"Notebook/1.0\",\"items\":[{\"type\":1,\"content\":{\"json\":\"## 🛡️ Cyren Threat Intelligence Dashboard\\n\\n**Real-time visibility into Cyren IP Reputation and Malware URLs feeds**\\n\\n✅ All queries validated with production data | 🔄 Auto-refresh every 5 minutes\\n\\n---\"},\"name\":\"header\"},{\"type\":9,\"content\":{\"version\":\"KqlParameterItem/1.0\",\"parameters\":[{\"id\":\"time-range\",\"version\":\"KqlParameterItem/1.0\",\"name\":\"TimeRange\",\"type\":4,\"isRequired\":true,\"value\":{\"durationMs\":86400000},\"typeSettings\":{\"selectableValues\":[{\"durationMs\":3600000,\"label\":\"1 hour\"},{\"durationMs\":21600000,\"label\":\"6 hours\"},{\"durationMs\":86400000,\"label\":\"24 hours\"},{\"durationMs\":604800000,\"label\":\"7 days\"},{\"durationMs\":2592000000,\"label\":\"30 days\"}],\"allowCustom\":true}}],\"style\":\"pills\",\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\"},\"name\":\"parameters\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"Cyren_Indicators_CL \\n| where TimeGenerated >= ago(1h) \\n| summarize \\n    Total=count(), \\n    IPRep=countif(source_s contains 'IP'), \\n    MalwareURLs=countif(source_s contains 'Malware'), \\n    Latest=max(TimeGenerated),\\n    HoursAgo=datetime_diff('hour', now(), max(TimeGenerated))\\n| extend Status = case(\\n    HoursAgo > 7, \\\"🔴 Critical - No data > 7 hours\\\",\\n    HoursAgo > 6, \\\"🟡 Warning - Data delayed\\\",\\n    \\\"🟢 Healthy - Data flowing\\\"\\n)\\n| project Status, Total, IPRep, MalwareURLs, Latest, HoursAgo\",\"size\":3,\"title\":\"🔍 Data Pipeline Health (Last Hour)\",\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\",\"visualization\":\"tiles\",\"tileSettings\":{\"titleContent\":{\"columnMatch\":\"Status\",\"formatter\":1},\"leftContent\":{\"columnMatch\":\"Total\",\"formatter\":12,\"formatOptions\":{\"palette\":\"auto\"}},\"showBorder\":true}},\"name\":\"health-tiles\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"Cyren_Indicators_CL\\n| where TimeGenerated {TimeRange}\\n| where isnotempty(ip_s)\\n| extend Risk = toint(risk_d)\\n| summarize \\n    Count = count(),\\n    AvgRisk = avg(Risk),\\n    MaxRisk = max(Risk),\\n    Categories = make_set(category_s)\\n  by bin(TimeGenerated, 1h)\\n| order by TimeGenerated asc\",\"size\":0,\"title\":\"📊 IP Reputation Indicators Over Time\",\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\",\"visualization\":\"timechart\"},\"name\":\"ip-indicators-chart\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"Cyren_Indicators_CL\\n| where TimeGenerated {TimeRange}\\n| where isnotempty(url_s)\\n| extend Risk = toint(risk_d)\\n| summarize \\n    Count = count(),\\n    AvgRisk = avg(Risk),\\n    MaxRisk = max(Risk)\\n  by bin(TimeGenerated, 1h)\\n| order by TimeGenerated asc\",\"size\":0,\"title\":\"🔗 Malware URL Indicators Over Time\",\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\",\"visualization\":\"timechart\"},\"name\":\"url-indicators-chart\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"Cyren_Indicators_CL\\n| where TimeGenerated {TimeRange}\\n| where isnotempty(ip_s)\\n| extend Risk = toint(risk_d)\\n| where Risk >= 80\\n| summarize \\n    DetectionCount = count(),\\n    MaxRisk = max(Risk),\\n    Categories = make_set(category_s),\\n    FirstSeen = min(TimeGenerated),\\n    LastSeen = max(TimeGenerated)\\n  by IP = ip_s\\n| order by MaxRisk desc\\n| take 100\",\"size\":0,\"title\":\"🚨 High-Risk IP Indicators (Risk >= 80)\",\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\",\"visualization\":\"table\",\"gridSettings\":{\"formatters\":[{\"columnMatch\":\"MaxRisk\",\"formatter\":8,\"formatOptions\":{\"palette\":\"redGreen\"}}]}},\"name\":\"high-risk-ips-table\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"Cyren_Indicators_CL\\n| where TimeGenerated {TimeRange}\\n| where isnotempty(url_s)\\n| extend Risk = toint(risk_d)\\n| where Risk >= 80\\n| summarize \\n    DetectionCount = count(),\\n    MaxRisk = max(Risk),\\n    Categories = make_set(category_s),\\n    FirstSeen = min(TimeGenerated),\\n    LastSeen = max(TimeGenerated)\\n  by URL = url_s, Domain = domain_s\\n| order by MaxRisk desc\\n| take 100\",\"size\":0,\"title\":\"🚨 High-Risk Malware URLs (Risk >= 80)\",\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\",\"visualization\":\"table\",\"gridSettings\":{\"formatters\":[{\"columnMatch\":\"MaxRisk\",\"formatter\":8,\"formatOptions\":{\"palette\":\"redGreen\"}}]}},\"name\":\"high-risk-urls-table\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"Cyren_Indicators_CL\\n| where TimeGenerated {TimeRange}\\n| extend Category = tostring(category_s)\\n| where isnotempty(Category)\\n| summarize Count = count() by Category\\n| order by Count desc\\n| take 10\",\"size\":0,\"title\":\"📈 Top Threat Categories\",\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\",\"visualization\":\"piechart\"},\"name\":\"categories-pie\"}],\"fromTemplateId\":\"sentinel-CyrenThreatIntelligence\",\"$schema\":\"https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json\",\"metadata\":{\"version\":\"1.0\",\"name\":\"Cyren Threat Intelligence Dashboard\",\"description\":\"This workbook provides visualization and monitoring for Cyren threat intelligence indicators including IP reputation and malware URLs.\"}}\n",
+                "serializedData": "{\"version\":\"Notebook/1.0\",\"items\":[{\"type\":1,\"content\":{\"json\":\"## \ud83d\udee1\ufe0f Cyren Threat Intelligence Dashboard\\n\\n**Real-time visibility into Cyren IP Reputation and Malware URLs feeds**\\n\\n\u2705 All queries validated with production data | \ud83d\udd04 Auto-refresh every 5 minutes\\n\\n---\"},\"name\":\"header\"},{\"type\":9,\"content\":{\"version\":\"KqlParameterItem/1.0\",\"parameters\":[{\"id\":\"time-range\",\"version\":\"KqlParameterItem/1.0\",\"name\":\"TimeRange\",\"type\":4,\"isRequired\":true,\"value\":{\"durationMs\":86400000},\"typeSettings\":{\"selectableValues\":[{\"durationMs\":3600000,\"label\":\"1 hour\"},{\"durationMs\":21600000,\"label\":\"6 hours\"},{\"durationMs\":86400000,\"label\":\"24 hours\"},{\"durationMs\":604800000,\"label\":\"7 days\"},{\"durationMs\":2592000000,\"label\":\"30 days\"}],\"allowCustom\":true}}],\"style\":\"pills\",\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\"},\"name\":\"parameters\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"Cyren_Indicators_CL \\n| where TimeGenerated >= ago(1h) \\n| summarize \\n    Total=count(), \\n    IPRep=countif(source_s contains 'IP'), \\n    MalwareURLs=countif(source_s contains 'Malware'), \\n    Latest=max(TimeGenerated),\\n    HoursAgo=datetime_diff('hour', now(), max(TimeGenerated))\\n| extend Status = case(\\n    HoursAgo > 7, \\\"\ud83d\udd34 Critical - No data > 7 hours\\\",\\n    HoursAgo > 6, \\\"\ud83d\udfe1 Warning - Data delayed\\\",\\n    \\\"\ud83d\udfe2 Healthy - Data flowing\\\"\\n)\\n| project Status, Total, IPRep, MalwareURLs, Latest, HoursAgo\",\"size\":3,\"title\":\"\ud83d\udd0d Data Pipeline Health (Last Hour)\",\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\",\"visualization\":\"tiles\",\"tileSettings\":{\"titleContent\":{\"columnMatch\":\"Status\",\"formatter\":1},\"leftContent\":{\"columnMatch\":\"Total\",\"formatter\":12,\"formatOptions\":{\"palette\":\"auto\"}},\"showBorder\":true}},\"name\":\"health-tiles\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"Cyren_Indicators_CL\\n| where TimeGenerated {TimeRange}\\n| where isnotempty(ip_s)\\n| extend Risk = toint(risk_d)\\n| summarize \\n    Count = count(),\\n    AvgRisk = avg(Risk),\\n    MaxRisk = max(Risk),\\n    Categories = make_set(category_s)\\n  by bin(TimeGenerated, 1h)\\n| order by TimeGenerated asc\",\"size\":0,\"title\":\"\ud83d\udcca IP Reputation Indicators Over Time\",\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\",\"visualization\":\"timechart\"},\"name\":\"ip-indicators-chart\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"Cyren_Indicators_CL\\n| where TimeGenerated {TimeRange}\\n| where isnotempty(url_s)\\n| extend Risk = toint(risk_d)\\n| summarize \\n    Count = count(),\\n    AvgRisk = avg(Risk),\\n    MaxRisk = max(Risk)\\n  by bin(TimeGenerated, 1h)\\n| order by TimeGenerated asc\",\"size\":0,\"title\":\"\ud83d\udd17 Malware URL Indicators Over Time\",\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\",\"visualization\":\"timechart\"},\"name\":\"url-indicators-chart\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"Cyren_Indicators_CL\\n| where TimeGenerated {TimeRange}\\n| where isnotempty(ip_s)\\n| extend Risk = toint(risk_d)\\n| where Risk >= 80\\n| summarize \\n    DetectionCount = count(),\\n    MaxRisk = max(Risk),\\n    Categories = make_set(category_s),\\n    FirstSeen = min(TimeGenerated),\\n    LastSeen = max(TimeGenerated)\\n  by IP = ip_s\\n| order by MaxRisk desc\\n| take 100\",\"size\":0,\"title\":\"\ud83d\udea8 High-Risk IP Indicators (Risk >= 80)\",\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\",\"visualization\":\"table\",\"gridSettings\":{\"formatters\":[{\"columnMatch\":\"MaxRisk\",\"formatter\":8,\"formatOptions\":{\"palette\":\"redGreen\"}}]}},\"name\":\"high-risk-ips-table\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"Cyren_Indicators_CL\\n| where TimeGenerated {TimeRange}\\n| where isnotempty(url_s)\\n| extend Risk = toint(risk_d)\\n| where Risk >= 80\\n| summarize \\n    DetectionCount = count(),\\n    MaxRisk = max(Risk),\\n    Categories = make_set(category_s),\\n    FirstSeen = min(TimeGenerated),\\n    LastSeen = max(TimeGenerated)\\n  by URL = url_s, Domain = domain_s\\n| order by MaxRisk desc\\n| take 100\",\"size\":0,\"title\":\"\ud83d\udea8 High-Risk Malware URLs (Risk >= 80)\",\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\",\"visualization\":\"table\",\"gridSettings\":{\"formatters\":[{\"columnMatch\":\"MaxRisk\",\"formatter\":8,\"formatOptions\":{\"palette\":\"redGreen\"}}]}},\"name\":\"high-risk-urls-table\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"Cyren_Indicators_CL\\n| where TimeGenerated {TimeRange}\\n| extend Category = tostring(category_s)\\n| where isnotempty(Category)\\n| summarize Count = count() by Category\\n| order by Count desc\\n| take 10\",\"size\":0,\"title\":\"\ud83d\udcc8 Top Threat Categories\",\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\",\"visualization\":\"piechart\"},\"name\":\"categories-pie\"}],\"fromTemplateId\":\"sentinel-CyrenThreatIntelligence\",\"$schema\":\"https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json\",\"metadata\":{\"version\":\"1.0\",\"name\":\"Cyren Threat Intelligence Dashboard\",\"description\":\"This workbook provides visualization and monitoring for Cyren threat intelligence indicators including IP reputation and malware URLs.\"}}\r\n",
                 "version": "1.0",
                 "sourceId": "[variables('workspaceResourceId')]",
                 "category": "sentinel"
@@ -1257,12 +1257,12 @@
       "apiVersion": "2023-04-01-preview",
       "location": "[parameters('workspace-location')]",
       "properties": {
-        "version": "3.0.3",
+        "version": "3.0.4",
         "kind": "Solution",
         "contentSchemaVersion": "3.0.0",
         "displayName": "CyrenThreatIntelligence",
         "publisherDisplayName": "Data443 Risk Mitigation, Inc.",
-        "descriptionHtml": "<p><strong>Note:</strong> Please refer to the following before installing the solution:</p>\n<p>• Review the solution <a href=\"https://github.com/Azure/Azure-Sentinel/tree/master/Solutions/CyrenThreatIntelligence/ReleaseNotes.md\">Release Notes</a></p>\n<p>• There may be <a href=\"https://aka.ms/sentinelsolutionsknownissues\">known issues</a> pertaining to this Solution, please refer to them before installing.</p>\n<p>The <a href=\"https://data443.com/cyren-threat-intelligence/\">Cyren Threat Intelligence</a> solution provides the capability to ingest Cyren IP reputation and malware URL threat intelligence into Microsoft Sentinel using the Codeless Connector Framework (CCF). This solution deploys REST API poller connectors, a custom log table, data collection rules, analytics rules, and visualization workbook to help security teams detect and investigate network-based threats.</p>\n<p><strong>Data Connectors:</strong> 1, <strong>Workbooks:</strong> 1, <strong>Analytic Rules:</strong> 3</p>\n<p><a href=\"https://aka.ms/azuresentinel\">Learn more about Microsoft Sentinel</a> | <a href=\"https://aka.ms/azuresentinelsolutionsdoc\">Learn more about Solutions</a></p>\n",
+        "descriptionHtml": "<p><strong>Note:</strong> Please refer to the following before installing the solution:</p>\n<p>\u2022 Review the solution <a href=\"https://github.com/Azure/Azure-Sentinel/tree/master/Solutions/CyrenThreatIntelligence/ReleaseNotes.md\">Release Notes</a></p>\n<p>\u2022 There may be <a href=\"https://aka.ms/sentinelsolutionsknownissues\">known issues</a> pertaining to this Solution, please refer to them before installing.</p>\n<p>The <a href=\"https://data443.com/cyren-threat-intelligence/\">Cyren Threat Intelligence</a> solution provides the capability to ingest Cyren IP reputation and malware URL threat intelligence into Microsoft Sentinel using the Codeless Connector Framework (CCF). This solution deploys REST API poller connectors, a custom log table, data collection rules, analytics rules, and visualization workbook to help security teams detect and investigate network-based threats.</p>\n<p><strong>Data Connectors:</strong> 1, <strong>Workbooks:</strong> 1, <strong>Analytic Rules:</strong> 3</p>\n<p><a href=\"https://aka.ms/azuresentinel\">Learn more about Microsoft Sentinel</a> | <a href=\"https://aka.ms/azuresentinelsolutionsdoc\">Learn more about Solutions</a></p>\n",
         "contentKind": "Solution",
         "contentProductId": "[variables('_solutioncontentProductId')]",
         "id": "[variables('_solutioncontentProductId')]",
