@@ -1265,12 +1265,12 @@
                     "parameters": {
                         "connectorDefinitionName": {
                             "defaultValue": "Dynamics 365 Finance and Operations",
-                            "type": "string",
+                            "type": "securestring",
                             "minLength": 1
                         },
                         "workspace": {
                             "defaultValue": "[parameters('workspace')]",
-                            "type": "string"
+                            "type": "securestring"
                         },
                         "dcrConfig": {
                             "defaultValue": {
@@ -1281,12 +1281,12 @@
                         },
                         "tenantId": {
                             "defaultValue": "tenantId",
-                            "type": "string",
+                            "type": "securestring",
                             "minLength": 1
                         },
                         "clientId": {
                             "defaultValue": "clientId",
-                            "type": "string",
+                            "type": "securestring",
                             "minLength": 1
                         },
                         "clientSecret": {
@@ -1296,12 +1296,12 @@
                         },
                         "auditHost": {
                             "defaultValue": "auditHost",
-                            "type": "string",
+                            "type": "securestring",
                             "minLength": 1
                         },
                         "innerWorkspace": {
                             "defaultValue": "[parameters('workspace')]",
-                            "type": "string"
+                            "type": "securestring"
                         }
                     },
                     "variables": {
@@ -13286,12 +13286,12 @@
                     "parameters": {
                         "connectorDefinitionName": {
                             "defaultValue": "connectorDefinitionName",
-                            "type": "string",
+                            "type": "securestring",
                             "minLength": 1
                         },
                         "workspace": {
                             "defaultValue": "[parameters('workspace')]",
-                            "type": "string"
+                            "type": "securestring"
                         },
                         "dcrConfig": {
                             "defaultValue": {
@@ -13707,12 +13707,12 @@
                     "parameters": {
                         "connectorDefinitionName": {
                             "defaultValue": "connectorDefinitionName",
-                            "type": "string",
+                            "type": "securestring",
                             "minLength": 1
                         },
                         "workspace": {
                             "defaultValue": "[parameters('workspace')]",
-                            "type": "string"
+                            "type": "securestring"
                         },
                         "dcrConfig": {
                             "defaultValue": {
@@ -14112,12 +14112,12 @@
                     "parameters": {
                         "connectorDefinitionName": {
                             "defaultValue": "connectorDefinitionName",
-                            "type": "string",
+                            "type": "securestring",
                             "minLength": 1
                         },
                         "workspace": {
                             "defaultValue": "[parameters('workspace')]",
-                            "type": "string"
+                            "type": "securestring"
                         },
                         "dcrConfig": {
                             "defaultValue": {
