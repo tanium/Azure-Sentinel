@@ -48,7 +48,7 @@
     "_email": "[variables('email')]",
     "_solutionName": "DataBahn",
     "_solutionVersion": "3.0.0",
-    "solutionId": "databahn.databahn-sentinel-push",
+    "solutionId": "databahninc1771934525923.databahn-sentinel-push",
     "_solutionId": "[variables('solutionId')]",
     "workspaceResourceId": "[resourceId('microsoft.OperationalInsights/Workspaces', parameters('workspace'))]",
     "dataConnectorCCPVersion": "1.0.0",
