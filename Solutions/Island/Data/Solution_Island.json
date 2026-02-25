@@ -12,7 +12,7 @@
     "Solutions/Island/Workbooks/IslandAdminAuditOverview.json",
     "Solutions/Island/Workbooks/IslandUserActivityOverview.json"
   ],
-  "BasePath": "C:\\\\GitHub\\\\Azure-Sentinel\\\\Solutions\\\\Island",
+  "BasePath": "C:\\GitHub\\Azure-Sentinel\\Solutions\\Island",
   "Version": "3.1.0",
   "Metadata": "SolutionMetadata.json",
   "TemplateSpec": true,
