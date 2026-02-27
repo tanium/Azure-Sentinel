@@ -1,6 +1,6 @@
 # Changelog for vimRegistryEventMicrosoft365D.yaml
 
-## Version 0.2.0
+## Version 0.1.3
 
 - (2026-02-26) Added mandatory columns - EventSchema, EventResult
 
