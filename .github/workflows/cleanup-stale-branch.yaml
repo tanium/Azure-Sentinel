@@ -4,7 +4,8 @@ run-name: Stale Branches Cleanup Running
 
 on:
   schedule:
-    - cron: '0 4 * * 1-5'
+  # Runs at 4:00 AM every day (Monday to Sunday)
+    - cron: '0 4 * * 1-7'
   # Allows to run workflow manually from the Actions tab
   workflow_dispatch:
 
