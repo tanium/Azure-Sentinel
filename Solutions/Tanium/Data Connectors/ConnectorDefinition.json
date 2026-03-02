@@ -1,0 +1,159 @@
+{
+    "name": "TaniumPush",
+    "apiVersion": "2022-09-01-preview",
+    "type": "Microsoft.SecurityInsights/dataConnectorDefinitions",
+    "location": "[parameters('location')]",
+    "kind": "Customizable",
+    "properties": {
+        "connectorUiConfig": {
+            "id": "TaniumPush",
+            "title": "Tanium Push Connector",
+            "publisher": "Tanium Inc.",
+            "logo": "Tanium.svg",
+            "descriptionMarkdown": "This data feeds Sentinel workbooks and playbooks so analysts can enrich incidents, visualize endpoint risk and health, and automate investigation and response workflows. For more details about Tanium, head to [https://www.tanium.com/contact-us/](https://www.tanium.com/contact-us/)",
+            "graphQueries": [
+                {
+                    "metricName": "Basic Inventory",
+                    "legend": "TaniumMainAsset_CL",
+                    "baseQuery": "TaniumMainAsset_CL"
+                }
+            ],
+            "sampleQueries": [
+                {
+                    "description": "Tanium - Basic Inventory",
+                    "query": "TaniumMainAsset_CL\n | sort by TimeGenerated desc"
+                }
+            ],
+            "dataTypes": [
+                {
+                    "name": "TaniumMainAsset_CL",
+                    "lastDataReceivedQuery": "TaniumMainAsset_CL\n| summarize Time = max(TimeGenerated)\n| where isnotempty(Time)"
+                }
+            ],
+            "connectivityCriteria": [
+                {
+                    "type": "IsConnectedQuery",
+                    "value": [
+                        "TaniumMainAsset_CL\n| summarize LastLogReceived = max(TimeGenerated)\n| project IsConnected = LastLogReceived > ago(7d)"
+                    ]
+                }
+            ],
+            "availability": {
+                "status": 1
+            },
+            "permissions": {
+                "resourceProvider": [
+                    {
+                        "provider": "Microsoft.OperationalInsights/workspaces",
+                        "permissionsDisplayText": "read and write permissions are required.",
+                        "providerDisplayName": "Workspace",
+                        "scope": "Workspace",
+                        "requiredPermissions": {
+                            "write": true,
+                            "read": true
+                        }
+                    }
+                ],
+                "customs": [
+                    {
+                        "name": "Microsoft Entra",
+                        "description": "Permission to create an app registration in Microsoft Entra ID."
+                    },
+                    {
+                        "name": "Microsoft Azure",
+                        "description": "Permission to assign Monitoring Metrics Publisher role on data collection rule (DCR)."
+                    }
+                ]
+            },
+            "instructionSteps": [
+                {
+                    "title": "1. Create ARM Resources and Provide the Required Permissions",
+                    "description": "This connector creates the necessary Log Analytics Tables, DCRs and applies the required permissions. This allows the data sent in to be read in to Microsoft Sentinel.",
+                    "instructions": [
+                        {
+                            "type": "Markdown",
+                            "parameters": {
+                                "content": "#### Automated Configuration and Secure Data Ingestion with Entra Application \nClicking on \"Deploy\" will trigger the creation of Log Analytics tables and a Data Collection Rule (DCR). \nIt will then create an Entra application, link the DCR to it, and set the entered secret in the application. This setup enables data to be sent securely to the DCR using an Entra token."
+                            }
+                        },
+                        {
+                            "parameters": {
+                                "label": "Deploy Tanium connector resources",
+                                "applicationDisplayName": "Tanium Connector Application"
+                            },
+                            "type": "DeployPushConnectorButton"
+                        }
+                    ]
+                },
+                {
+                    "title": "2. Configure Tanium Connections",
+                    "description": "Use the following parameters to configure the your Tanium Connections to push data to the workspace.",
+                    "instructions": [
+                        {
+                            "parameters": {
+                                "label": "Tenant ID (Directory ID)",
+                                "fillWith": [
+                                    "TenantId"
+                                ]
+                            },
+                            "type": "CopyableLabel"
+                        },
+                        {
+                            "parameters": {
+                                "label": "Entra App Registration Application ID",
+                                "fillWith": [
+                                    "ApplicationId"
+                                ],
+                                "placeholder": "Deploy push connector to get the App Registration Application ID (aka Client Id)"
+                            },
+                            "type": "CopyableLabel"
+                        },
+                        {
+                            "parameters": {
+                                "label": "Entra App Registration Secret",
+                                "fillWith": [
+                                    "ApplicationSecret"
+                                ],
+                                "placeholder": "Deploy push connector to get the App Registration Secret (aka Client Secret)"
+                            },
+                            "type": "CopyableLabel"
+                        },
+                        {
+                            "parameters": {
+                                "label": "Data Collection Endpoint Uri",
+                                "fillWith": [
+                                    "DataCollectionEndpoint"
+                                ],
+                                "placeholder": "Deploy push connector to get the Data Collection Endpoint Uri"
+                            },
+                            "type": "CopyableLabel"
+                        },
+                        {
+                            "parameters": {
+                                "label": "Data Collection Rule Immutable ID",
+                                "fillWith": [
+                                    "DataCollectionRuleId"
+                                ],
+                                "placeholder": "Deploy push connector to get the Data Collection Rule Immutable ID"
+                            },
+                            "type": "CopyableLabel"
+                        },
+                        {
+                            "parameters": {
+                                "label": "Sentinel Basic Inventory Logs Stream Name",
+                                "value": "Custom-SentinelBasicInventory"
+                            },
+                            "type": "CopyableLabel"
+                        },
+                        {
+                            "type": "Markdown",
+                            "parameters": {
+                                "content": "#### Configure Tanium Connections\nUpdate your Tanium Connections' configuration with the above credentials to enable pushing to Microsoft Sentinel."
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
