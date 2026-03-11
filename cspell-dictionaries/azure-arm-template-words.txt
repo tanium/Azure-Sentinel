@@ -1,3 +1,2 @@
 azuresentinel
 securestring
-uniquestring
