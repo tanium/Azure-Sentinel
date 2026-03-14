@@ -1,0 +1,177 @@
+{
+    "name": "ComplianceFindings",
+    "apiVersion": "2022-09-01-preview",
+    "type": "Microsoft.SecurityInsights/dataConnectorDefinitions",
+    "location": "[parameters('location')]",
+    "kind": "Customizable",
+    "properties": {
+        "connectorUiConfig": {
+            "id": "ComplianceFindings",
+            "title": "Tanium's Compliance Findings Push Connector",
+            "publisher": "Tanium Inc.",
+            "logo": "Tanium.svg",
+            "descriptionMarkdown": "This data feeds Sentinel workbooks and playbooks so analysts can enrich incidents, visualize endpoint risk and health, and automate investigation and response workflows. For more details about Tanium, head to [https://www.tanium.com/contact-us/](https://www.tanium.com/contact-us/)",
+            "graphQueries": [
+                {
+                    "metricName": "Compliance Findings",
+                    "legend": "TaniumComplyCompliance_CL",
+                    "baseQuery": "TaniumComplyCompliance_CL"
+                }
+            ],
+            "sampleQueries": [
+                {
+                    "description": "Tanium - Compliance Findings",
+                    "query": "TaniumComplyCompliance_CL\n | sort by TimeGenerated desc"
+                }
+            ],
+            "dataTypes": [
+                {
+                    "name": "TaniumComplyCompliance_CL",
+                    "lastDataReceivedQuery": "TaniumComplyCompliance_CL\n| summarize Time = max(TimeGenerated)\n| where isnotempty(Time)"
+                }
+            ],
+            "connectivityCriteria": [
+                {
+                    "type": "IsConnectedQuery",
+                    "value": [
+                        "TaniumComplyCompliance_CL\n| summarize LastLogReceived = max(TimeGenerated)\n| project IsConnected = LastLogReceived > ago(7d)"
+                    ]
+                }
+            ],
+            "availability": {
+                "status": 1
+            },
+            "permissions": {
+                "resourceProvider": [
+                    {
+                        "provider": "Microsoft.OperationalInsights/workspaces",
+                        "permissionsDisplayText": "read and write permissions are required.",
+                        "providerDisplayName": "Workspace",
+                        "scope": "Workspace",
+                        "requiredPermissions": {
+                            "write": true,
+                            "read": true
+                        }
+                    }
+                ],
+                "customs": [
+                    {
+                        "name": "Microsoft Entra",
+                        "description": "Permission to create an app registration in Microsoft Entra ID."
+                    },
+                    {
+                        "name": "Microsoft Azure",
+                        "description": "Permission to assign Monitoring Metrics Publisher role on data collection rule (DCR)."
+                    }
+                ]
+            },
+            "instructionSteps": [
+                {
+                    "title": "1. Create ARM Resources and Provide the Required Permissions",
+                    "description": "This connector enables your Tanium Server to push Compliance Findings data directly to Microsoft Sentinel via the Azure Monitor Ingestion API.",
+                    "instructions": [
+                        {
+                            "type": "Markdown",
+                            "parameters": {
+                                "content": "#### Automated Configuration and Secure Data Ingestion with Entra Application \nClicking on \"Deploy\" will trigger the creation of Log Analytics table and a Data Collection Rule (DCR). \nIt will then create an Entra application, link the DCR to it, and set the entered secret in the application. This setup enables the Tanium data to be sent securely to the DCR using an Entra token."
+                            }
+                        },
+                        {
+                            "parameters": {
+                                "label": "Deploy Compliance Findings connector resources",
+                                "applicationDisplayName": "Tanium Connector Application"
+                            },
+                            "type": "DeployPushConnectorButton"
+                        }
+                    ]
+                },
+                {
+                    "title": "2. Tanium Connection Configuration Values",
+                    "description": "Use the following parameters to configure the your Tanium Connections to push data to the workspace.",
+                    "instructions": [
+                        {
+                            "parameters": {
+                                "label": "Tenant ID (Directory ID)",
+                                "fillWith": [
+                                    "TenantId"
+                                ]
+                            },
+                            "type": "CopyableLabel"
+                        },
+                        {
+                            "parameters": {
+                                "label": "Entra App Registration Application ID",
+                                "fillWith": [
+                                    "ApplicationId"
+                                ],
+                                "placeholder": "Deploy push connector to get the App Registration Application ID (aka Client Id)"
+                            },
+                            "type": "CopyableLabel"
+                        },
+                        {
+                            "parameters": {
+                                "label": "Entra App Registration Secret",
+                                "fillWith": [
+                                    "ApplicationSecret"
+                                ],
+                                "placeholder": "Deploy push connector to get the App Registration Secret (aka Client Secret)"
+                            },
+                            "type": "CopyableLabel"
+                        },
+                        {
+                            "parameters": {
+                                "label": "Data Collection Endpoint Uri",
+                                "fillWith": [
+                                    "DataCollectionEndpoint"
+                                ],
+                                "placeholder": "Deploy push connector to get the Data Collection Endpoint Uri"
+                            },
+                            "type": "CopyableLabel"
+                        },
+                        {
+                            "parameters": {
+                                "label": "Data Collection Rule Immutable ID",
+                                "fillWith": [
+                                    "DataCollectionRuleId"
+                                ],
+                                "placeholder": "Deploy push connector to get the Data Collection Rule Immutable ID"
+                            },
+                            "type": "CopyableLabel"
+                        },
+                        {
+                            "parameters": {
+                                "label": "Logs Stream Name",
+                                "value": "Custom-TaniumComplyCompliance"
+                            },
+                            "type": "CopyableLabel"
+                        }
+                    ]
+                },
+                {
+                    "title": "3. Create the Connection in Tanium",
+                    "description": "After you've successfully deployed the data connector in Azure, create the required connection in your Tanium server in the Connect Module. For more information regarding the Connect module see [Tanium Help](https://help.tanium.com/bundle/ug_connect_cloud/page/connect/overview.html)",
+                    "instructions": [
+                        {
+                            "type": "Markdown",
+                            "parameters": {
+                                "content": "#### Option 1: Import the Connection\n1. Create a new JSON file.\n2. Copy the JSON below into the file.\n3. Replace the placeholders with the parameters displayed above.\n4. In your Tanium Server open the Connect Module.\n5. Import the file to create the connection."
+                            }
+                        },
+                        {
+                            "type": "Markdown",
+                            "parameters": {
+                                "content": "```json\n[\n{\n\t\"name\": \"Sentinel - Comply Compliance Findings (Azure Monitor)\",\n\t\"description\": null,\n\t\"minimumPassPercentage\": 0,\n\t\"logLevel\": 30,\n\t\"tempLogLevel\": 30,\n\t\"tempLogLevelRuns\": 0,\n\t\"schedule\": \"0 0 * * *\",\n\t\"scheduleTimeZone\": \"UTC\",\n\t\"moduleCallbackUri\": null,\n\t\"maxOldSpaceSize\": 1,\n\t\"streams\": [\n\t\t{\n\t\t\t\"route\": \"/v1/sources/pluginConfigurations/comply/findings-source\",\n\t\t\t\"arguments\": {\n\t\t\t\t\"config\": {\n\t\t\t\t\t\"type\": \"Compliance\",\n\t\t\t\t\t\"queryTimeoutSeconds\": 120,\n\t\t\t\t\t\"batchSize\": 5000,\n\t\t\t\t\t\"testCacheSize\": 100,\n\t\t\t\t\t\"reportName\": \"None\",\n\t\t\t\t\t\"createdWithVersion\": \"4.11.0\"\n\t\t\t\t},\n\t\t\t\t\"module\": \"comply\",\n\t\t\t\t\"plugin\": \"findings-source\",\n\t\t\t\t\"type\": \"sources\",\n\t\t\t\t\"destinationType\": null,\n\t\t\t\t\"name\": \"comply-findings-source-664ca099-ab3a-4eba-bc5e-13b886e41458\"\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"route\": \"/v1/formats/columns\",\n\t\t\t\"arguments\": {\n\t\t\t\t\"columns\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"checked\": true,\n\t\t\t\t\t\t\"name\": \"Computer Name\",\n\t\t\t\t\t\t\"renameTo\": \"ComputerName\",\n\t\t\t\t\t\t\"type\": \"source\",\n\t\t\t\t\t\t\"valueType\": \"Unmodified\",\n\t\t\t\t\t\t\"referenceColumnNames\": [],\n\t\t\t\t\t\t\"value\": null,\n\t\t\t\t\t\t\"hint\": null,\n\t\t\t\t\t\t\"defaultValue\": null,\n\t\t\t\t\t\t\"formatString\": null\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"checked\": true,\n\t\t\t\t\t\t\"name\": \"IP Address\",\n\t\t\t\t\t\t\"renameTo\": \"IPAddress\",\n\t\t\t\t\t\t\"type\": \"source\",\n\t\t\t\t\t\t\"valueType\": \"Unmodified\",\n\t\t\t\t\t\t\"referenceColumnNames\": [],\n\t\t\t\t\t\t\"value\": null,\n\t\t\t\t\t\t\"hint\": null,\n\t\t\t\t\t\t\"defaultValue\": null,\n\t\t\t\t\t\t\"formatString\": null\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"checked\": true,\n\t\t\t\t\t\t\"name\": \"Operating System Generation\",\n\t\t\t\t\t\t\"renameTo\": \"OperatingSystemGeneration\",\n\t\t\t\t\t\t\"type\": \"source\",\n\t\t\t\t\t\t\"valueType\": \"Unmodified\",\n\t\t\t\t\t\t\"referenceColumnNames\": [],\n\t\t\t\t\t\t\"value\": null,\n\t\t\t\t\t\t\"hint\": null,\n\t\t\t\t\t\t\"defaultValue\": null,\n\t\t\t\t\t\t\"formatString\": null\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"checked\": true,\n\t\t\t\t\t\t\"name\": \"Rule\",\n\t\t\t\t\t\t\"renameTo\": \"Rule\",\n\t\t\t\t\t\t\"type\": \"source\",\n\t\t\t\t\t\t\"valueType\": \"Unmodified\",\n\t\t\t\t\t\t\"referenceColumnNames\": [],\n\t\t\t\t\t\t\"value\": null,\n\t\t\t\t\t\t\"hint\": null,\n\t\t\t\t\t\t\"defaultValue\": null,\n\t\t\t\t\t\t\"formatString\": null\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"checked\": true,\n\t\t\t\t\t\t\"name\": \"Rule ID\",\n\t\t\t\t\t\t\"renameTo\": \"RuleID\",\n\t\t\t\t\t\t\"type\": \"source\",\n\t\t\t\t\t\t\"valueType\": \"Unmodified\",\n\t\t\t\t\t\t\"referenceColumnNames\": [],\n\t\t\t\t\t\t\"value\": null,\n\t\t\t\t\t\t\"hint\": null,\n\t\t\t\t\t\t\"defaultValue\": null,\n\t\t\t\t\t\t\"formatString\": null\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"checked\": true,\n\t\t\t\t\t\t\"name\": \"Standard\",\n\t\t\t\t\t\t\"renameTo\": \"Standard\",\n\t\t\t\t\t\t\"type\": \"source\",\n\t\t\t\t\t\t\"valueType\": \"Unmodified\",\n\t\t\t\t\t\t\"referenceColumnNames\": [],\n\t\t\t\t\t\t\"value\": null,\n\t\t\t\t\t\t\"hint\": null,\n\t\t\t\t\t\t\"defaultValue\": null,\n\t\t\t\t\t\t\"formatString\": null\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"checked\": true,\n\t\t\t\t\t\t\"name\": \"Profile\",\n\t\t\t\t\t\t\"renameTo\": \"Profile\",\n\t\t\t\t\t\t\"type\": \"source\",\n\t\t\t\t\t\t\"valueType\": \"Unmodified\",\n\t\t\t\t\t\t\"referenceColumnNames\": [],\n\t\t\t\t\t\t\"value\": null,\n\t\t\t\t\t\t\"hint\": null,\n\t\t\t\t\t\t\"defaultValue\": null,\n\t\t\t\t\t\t\"formatString\": null\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"checked\": true,\n\t\t\t\t\t\t\"name\": \"Version\",\n\t\t\t\t\t\t\"renameTo\": \"Version\",\n\t\t\t\t\t\t\"type\": \"source\",\n\t\t\t\t\t\t\"valueType\": \"Unmodified\",\n\t\t\t\t\t\t\"referenceColumnNames\": [],\n\t\t\t\t\t\t\"value\": null,\n\t\t\t\t\t\t\"hint\": null,\n\t\t\t\t\t\t\"defaultValue\": null,\n\t\t\t\t\t\t\"formatString\": null\n\t\t\t\t\t},\n\t\t\t\t\t{\n\t\t\t\t\t\t\"checked\": true,\n\t\t\t\t\t\t\"name\": \"Status Category\",\n\t\t\t\t\t\t\"renameTo\": \"StatusCategory\",\n\t\t\t\t\t\t\"type\": \"source\",\n\t\t\t\t\t\t\"valueType\": \"Unmodified\",\n\t\t\t\t\t\t\"referenceColumnNames\": [],\n\t\t\t\t\t\t\"value\": null,\n\t\t\t\t\t\t\"hint\": null,\n\t\t\t\t\t\t\"defaultValue\": null,\n\t\t\t\t\t\t\"formatString\": null\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"route\": \"/v1/formats/stringifies\",\n\t\t\t\"arguments\": {\n\t\t\t\t\"surroundWithSource\": false,\n\t\t\t\t\"enhancedJson\": false,\n\t\t\t\t\"rowSeparator\": \"\\n\",\n\t\t\t\t\"valueEscape\": \"\",\n\t\t\t\t\"valueEscapeReplace\": \"\",\n\t\t\t\t\"generateDocument\": true\n\t\t\t}\n\t\t},\n\t\t{\n\t\t\t\"route\": \"/v1/destinations/pluginConfigurations/connect/logs-ingestion-destination\",\n\t\t\t\"arguments\": {\n\t\t\t\t\"config\": {\n\t\t\t\t\t\"batchSize\": 500,\n\t\t\t\t\t\"name\": \"Sentinel - Comply Compliance Findings\",\n\t\t\t\t\t\"tenantId\": \"{{TenantId}}\",\n\t\t\t\t\t\"clientId\": \"{{ClientId}}\",\n\t\t\t\t\t\"clientSecret\": \"{{ClientSecret}}]\",\n\t\t\t\t\t\"ingestionEndpoint\": \"{{IngestionEndpoint}}\",\n\t\t\t\t\t\"dcrImmutableId\": \"{{DcrImmutableId}}\",\n\t\t\t\t\t\"streamName\": \"Custom-TaniumComplyCompliance\"\n\t\t\t\t},\n\t\t\t\t\"module\": \"connect\",\n\t\t\t\t\"plugin\": \"logs-ingestion-destination\",\n\t\t\t\t\"type\": \"destinations\",\n\t\t\t\t\"destinationType\": null,\n\t\t\t\t\"name\": \"Sentinel - Compliance Findings (Azure Monitor)\"\n\t\t\t}\n\t\t}\n\t],\n\t\"destinationType\": \"logs-ingestion-destination\"\n}\n\n]\n\n```"
+                            }
+                        },
+                        {
+                            "type": "Markdown",
+                            "parameters": {
+                                "content": "#### Option 2: Create the Connection Manually\n1. In your Tanium Server open the Connect Module.\n1. Create a new connection\n1. Select source as \"Tanium Comply (Findings)\"\n1. Select finding type \"Compliance\"\n1. Select the report \"Sentinel - Basic Inventory\"\n1. Select the destination as \"Azure Monitor\"\n1. Use the parameters above to fill in \n\t- Tenant ID\n\t- Client ID\n\t- Client Secret\n\t- Log Ingestion URL\n\t- Data Collection Rule Immutable ID\n\t- Stream Name\n1. Under the Format section check the box for \"Generate Document\"\n1. Update the columns for output to match the stream declaration in the DCR."
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
