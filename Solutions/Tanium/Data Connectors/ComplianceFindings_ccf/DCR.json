@@ -1,0 +1,71 @@
+{
+    "name": "TaniumComplianceFindingsDCR",
+    "apiVersion": "2021-09-01-preview",
+    "type": "Microsoft.Insights/dataCollectionRules",
+    "location": "[workspace().location]",
+    "properties": {
+        "streamDeclarations": {
+            "Custom-TaniumComplyCompliance": {
+                "columns": [
+                    {
+                        "name": "ComputerName",
+                        "type": "string"
+                    },
+                    {
+                        "name": "IPAddress",
+                        "type": "string"
+                    },
+                    {
+                        "name": "OperatingSystemGeneration",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Rule",
+                        "type": "string"
+                    },
+                    {
+                        "name": "RuleID",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Standard",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Profile",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Version",
+                        "type": "string"
+                    },
+                    {
+                        "name": "StatusCategory",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "destinations": {
+            "logAnalytics": [
+                {
+                    "workspaceResourceId": "[concat('/subscriptions/',parameters('subscription'),'/resourceGroups/',parameters('resourceGroupName'),'/providers/Microsoft.operationalinsights/workspaces/',parameters('workspace'))]",
+                    "name": "[parameters('workspace')]"
+                }
+            ]
+        },
+        "dataFlows": [
+            {
+                "streams": [
+                    "Custom-TaniumComplyCompliance"
+                ],
+                "destinations": [
+                    "[parameters('workspace')]"
+                ],
+                "transformKql": "source\n| project\n    TimeGenerated = now(),\n    Computer_Name_s = ComputerName,\n    IP_Address_s = IPAddress,\n    Operating_System_Generation_s = OperatingSystemGeneration,\n    Profile_s = Profile,\n    Rule_ID_s = Rule,\n    Rule_s = RuleID,\n    Standard_s = Standard,\n    Status_Category_s = StatusCategory,\n    Version_s = Version",
+                "outputStream": "Custom-TaniumComplyCompliance_CL"
+            }
+        ],
+        "dataCollectionEndpointId": "[concat('/subscriptions/',parameters('subscription'),'/resourceGroups/',parameters('resourceGroupName'),'/providers/Microsoft.Insights/dataCollectionEndpoints/',parameters('workspace'))]"
+    }
+}
