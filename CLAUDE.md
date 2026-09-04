@@ -14,7 +14,7 @@ Tanium ships one thing from here: the solution under `Solutions/Tanium/`.
 
 **Never reference Tanium Jira.** No ticket keys, no `jira.corp.tanium.com` links, anywhere — including pull request comments, which are just as public as the code. A link nobody outside Tanium can open still tells a reader the hostname, the project name, and roughly how much work is behind it. Tickets link out to GitHub. GitHub never links back.
 
-**Never commit `.claude/`.** It is ignored on this branch. Do not add it back.
+**Never commit `.claude/`.** Git does not ignore it here, so `git add -A` will stage it. The gate blocks any pull request that touches it, but check your staged files before you commit rather than finding out from a red build.
 
 **Never change anything under `.github/`.** Tanium does not own it, and a change there reaches Microsoft's repository silently.
 
