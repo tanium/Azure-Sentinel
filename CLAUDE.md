@@ -35,14 +35,11 @@ Push a tag on `tanium-base` and let the submit workflow run. It rebases the rele
 
 ## What Tanium owns
 
-Everything under `Solutions/Tanium/`, plus a small number of named files elsewhere:
+Tanium owns everything under `Solutions/Tanium/`.
 
-- `Logos/Tanium.svg`
-- `Workbooks/Images/Logos/Tanium.svg`
-- `Workbooks/Images/Preview/Tanium*.png`
-- `Workbooks/WorkbooksMetadata.json` — the Tanium entry only
-- `Sample Data/Custom/Tanium*`
-- `.script/tests/KqlvalidationsTests/CustomTables/Tanium*.json`
+Outside that folder, Tanium owns files with `Tanium` in the name. That is the whole rule, and it covers logos, preview images, sample data, and test fixtures alike. Adding a new one of any of those needs no change here.
+
+One shared file is different. `Workbooks/WorkbooksMetadata.json` belongs to every vendor, and Tanium owns only the entries whose `provider` is `Tanium`.
 
 Anything else in this repository belongs to Microsoft or to another vendor. Changing it affects people who are not on this team.
 
