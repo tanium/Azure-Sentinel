@@ -1,0 +1,123 @@
+name: Tanium submit
+
+# Prepares a release for Microsoft. Triggered by pushing a tag on tanium-base:
+#
+#     git tag submit-3.4.0 tanium-base
+#     git push origin submit-3.4.0
+#
+# A tag trigger runs the workflow from the tagged commit, which is why the tag goes on
+# tanium-base: this file only exists there. workflow_dispatch would not work, because
+# GitHub only offers that for workflows on the default branch, and the default branch
+# has to stay a clean mirror of Microsoft's master.
+#
+# What it does, in order:
+#   1. Replays the release branch onto clean upstream master, leaving internal files behind
+#   2. Runs the submit check on the result
+#   3. Pushes only if the check passed
+#   4. Prints a link for a human to open the pull request
+#
+# It never opens the pull request itself. That would need a person's GitHub token stored
+# as a secret in a public repository, to save one click.
+#
+# versions/X.Y.Z is never rewritten. The branch this builds is disposable and is rebuilt
+# from scratch every round, so the release branch keeps its real history and keeps
+# running the gates for as long as Microsoft is still asking for changes.
+
+on:
+  push:
+    tags:
+      - 'submit-*'
+
+permissions:
+  contents: write
+
+jobs:
+  submit:
+    name: Prepare the submission
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read the version from the tag
+        id: version
+        run: |
+          version="${GITHUB_REF_NAME#submit-}"
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Tag '${GITHUB_REF_NAME}' does not name a version. Use submit-3.4.0."
+            exit 1
+          fi
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "release_branch=versions/${version}" >> "$GITHUB_OUTPUT"
+          echo "submit_branch=submit/${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Keep the check scripts aside
+        # The rebase below checks out a branch that has no .github/tanium-gates folder,
+        # which is the whole point of it. Copy the scripts out first so they survive.
+        run: cp -r .github/tanium-gates "$RUNNER_TEMP/tanium-gates"
+
+      - name: Fetch Microsoft's master and the release branch
+        run: |
+          git remote add upstream https://github.com/Azure/Azure-Sentinel.git
+          git fetch upstream master
+          git fetch origin "${{ steps.version.outputs.release_branch }}" tanium-base
+
+      - name: Replay the release branch onto clean master
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "${{ steps.version.outputs.submit_branch }}" \
+            "origin/${{ steps.version.outputs.release_branch }}"
+          git rebase --onto upstream/master origin/tanium-base \
+            "${{ steps.version.outputs.submit_branch }}"
+
+      - name: Submit check
+        run: |
+          bash "$RUNNER_TEMP/tanium-gates/submit-check.sh" \
+            upstream/master \
+            origin/tanium-base \
+            "${{ steps.version.outputs.submit_branch }}"
+
+      - name: Push the submission branch
+        run: git push --force origin "${{ steps.version.outputs.submit_branch }}"
+
+      - name: Hand back a link
+        run: |
+          version="${{ steps.version.outputs.version }}"
+          submit_branch="${{ steps.version.outputs.submit_branch }}"
+
+          changes=$(git log --format='- %s' "upstream/master..${submit_branch}")
+
+          body=$(cat <<BODY
+          Change(s):
+          ${changes}
+
+          Reason for Change(s):
+          - TODO, one line on why
+
+          Version Updated:
+          - Yes, ${version}
+
+          Testing Completed:
+          - TODO, Yes / No / Need Help
+
+          Checked that the validations are passing and have addressed any issues that are present:
+          - Yes
+          BODY
+          )
+
+          title=$(printf 'Tanium Version %s' "$version" | jq -sRr @uri)
+          encoded_body=$(printf '%s' "$body" | jq -sRr @uri)
+          head="tanium:Azure-Sentinel:${submit_branch}"
+          link="https://github.com/Azure/Azure-Sentinel/compare/master...${head}?expand=1&title=${title}&body=${encoded_body}"
+
+          {
+            echo "## Ready to submit ${version}"
+            echo
+            echo "The branch \`${submit_branch}\` is pushed and the submit check passed."
+            echo
+            echo "[Open the pull request to Microsoft](${link})"
+            echo
+            echo "Two fields are left for you: the reason for the change, and testing completed."
+          } >> "$GITHUB_STEP_SUMMARY"

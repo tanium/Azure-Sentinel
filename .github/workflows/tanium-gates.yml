@@ -1,0 +1,123 @@
+name: Tanium gates
+
+# Runs on every pull request into a release branch and into tanium-base.
+#
+# This file only exists on tanium-base and on the branches cut from it, so it is
+# present on a developer's branch without anyone installing anything, and it is gone
+# from the branch that goes to Microsoft.
+#
+# There is deliberately no branch filter on pull_request. A pull request aimed
+# somewhere unexpected has to fail loudly rather than quietly running nothing.
+
+on:
+  pull_request:
+  push:
+    branches:
+      - 'versions/**'
+      - tanium-base
+
+permissions:
+  contents: read
+
+env:
+  # Solutions/Tanium/ci/build.sh prints headings with tput, which has no terminal on a
+  # runner and complains on every one. Naming a terminal here fixes it without editing
+  # build.sh, which lives in Microsoft's repository and would cost a release cycle.
+  TERM: xterm
+
+jobs:
+  route:
+    name: Which branch is this for
+    runs-on: ubuntu-latest
+    outputs:
+      mode: ${{ steps.pick.outputs.mode }}
+      target: ${{ steps.pick.outputs.target }}
+    steps:
+      - id: pick
+        run: |
+          target="${{ github.base_ref || github.ref_name }}"
+          echo "target=${target}" >> "$GITHUB_OUTPUT"
+
+          if [[ "$target" =~ ^versions/[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "mode=release" >> "$GITHUB_OUTPUT"
+            echo "Release branch ${target}."
+          elif [[ "$target" == "tanium-base" ]]; then
+            echo "mode=base" >> "$GITHUB_OUTPUT"
+            echo "Internal branch tanium-base."
+          else
+            echo "::error::Target branch '${target}' is neither versions/X.Y.Z nor tanium-base."
+            echo "Work for customers goes into a release branch."
+            echo "CLAUDE.md and the gate workflows go onto tanium-base."
+            exit 1
+          fi
+
+  release:
+    name: Release branch checks
+    needs: route
+    if: needs.route.outputs.mode == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install arm-ttk
+        run: |
+          modules="$HOME/.local/share/powershell/Modules"
+          mkdir -p "$modules"
+          git clone --depth 1 https://github.com/Azure/arm-ttk.git /tmp/arm-ttk
+          cp -r /tmp/arm-ttk/arm-ttk "$modules/arm-ttk"
+
+      - name: Work out the version bump from the branch name
+        id: bump
+        run: |
+          bump=$(bash .github/tanium-gates/resolve-bump.sh "${{ needs.route.outputs.target }}")
+          echo "bump=${bump}" >> "$GITHUB_OUTPUT"
+          echo "Treating ${{ needs.route.outputs.target }} as a ${bump} release."
+
+      - name: Solution validations
+        run: task --dir Solutions/Tanium/ci validate:${{ steps.bump.outputs.bump }}
+
+      - name: Secure inputs on Tanium API calls
+        if: always()
+        run: bash .github/tanium-gates/check-secure-inputs.sh
+
+      - name: Preview images exist
+        if: always()
+        run: bash .github/tanium-gates/check-preview-images.sh
+
+      - name: Paths Tanium does not own
+        if: always() && github.event_name == 'pull_request'
+        run: bash .github/tanium-gates/check-paths.sh "origin/${{ github.base_ref }}" HEAD
+
+      - name: Tracker and assistant references
+        if: always() && github.event_name == 'pull_request'
+        run: bash .github/tanium-gates/check-forbidden-references.sh "origin/${{ github.base_ref }}" HEAD
+
+      - name: Version bumped on every changed item
+        if: always() && github.event_name == 'pull_request'
+        run: bash .github/tanium-gates/check-version-bumps.sh "origin/${{ github.base_ref }}" HEAD
+
+  base:
+    name: tanium-base checks
+    needs: route
+    if: needs.route.outputs.mode == 'base'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Only internal files changed
+        if: github.event_name == 'pull_request'
+        run: bash .github/tanium-gates/check-base-scope.sh "origin/${{ github.base_ref }}" HEAD
+
+      - name: Tracker and assistant references
+        if: always() && github.event_name == 'pull_request'
+        run: bash .github/tanium-gates/check-forbidden-references.sh "origin/${{ github.base_ref }}" HEAD
