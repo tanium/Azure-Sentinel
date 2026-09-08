@@ -5,6 +5,9 @@ name: Tanium submit
 #     git tag submit-3.4.0 tanium-base
 #     git push origin submit-3.4.0
 #
+# Later rounds get their own tag, submit-3.4.0-r2 and so on, rather than moving the
+# first one.
+#
 # A tag trigger runs the workflow from the tagged commit, which is why the tag goes on
 # tanium-base: this file only exists there. workflow_dispatch would not work, because
 # GitHub only offers that for workflows on the default branch, and the default branch
@@ -43,9 +46,15 @@ jobs:
       - name: Read the version from the tag
         id: version
         run: |
-          version="${GITHUB_REF_NAME#submit-}"
+          # Everything after submit-, up to an optional round suffix. Microsoft often asks
+          # for changes, so each round gets its own tag: submit-3.4.0, then submit-3.4.0-r2.
+          # A fresh tag always fires this workflow, and the tags leave a record of how many
+          # rounds a release took.
+          raw="${GITHUB_REF_NAME#submit-}"
+          version="${raw%%-*}"
           if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "::error::Tag '${GITHUB_REF_NAME}' does not name a version. Use submit-3.4.0."
+            echo "::error::Tag '${GITHUB_REF_NAME}' does not name a version."
+            echo "Use submit-3.4.0, or submit-3.4.0-r2 for a later round."
             exit 1
           fi
           echo "version=${version}" >> "$GITHUB_OUTPUT"
